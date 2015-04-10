@@ -1,0 +1,14 @@
+body
+{
+	text-align: center;
+	background: #3993ff;
+}
+
+#mainContainer
+{
+	padding-top: 15px;
+	padding-bottom: 15px;
+	min-height: 600px;
+	color: #3d3d3d;
+	background: #f4f4f4;
+}
