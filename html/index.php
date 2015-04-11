@@ -11,7 +11,7 @@
 		<br>
 		<br>
 		<? //Start using php with this tag
-
+		phpinfo();
 		//Variables start with $ and don't require a datatype
 		$a = "apple";
 		$b = "banana";
