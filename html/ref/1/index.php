@@ -26,9 +26,6 @@ If you're on Windows, use Putty to connect to gocollegedays.com
 If you're on Mac/Linux, open a new terminal window and enter:
 <br><br><span class="code">$ ssh username@gocollegedays.com</span>
 <br><br>
-Your username is your first name and your password is your username with 
-a ! at the end (chris!).
-<br><br>
 </p>
 <h2>c. Setting up your 'local' repo</h2>
 <p>
