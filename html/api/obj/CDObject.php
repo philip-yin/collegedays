@@ -6,12 +6,11 @@ class CDObject
 {
 	public $ID;
 	public $exists;
+	public $tablename;
+	public $row;
+	public $PDOconn;
 	
-	private $tablename;
-	private $row;
-	private $PDOconn;
-	
-	public CDObject($tablename = '')
+	function CDObject($tablename = '')
 	{
 		$this->PDOconn = newPDOconn();
 		$this->ID = '';
@@ -19,12 +18,15 @@ class CDObject
 		$this->exists = false;
 	}
 	
-	public refresh()
+	public function refresh()
 	{
 		//Get the row
-		$sql = "SELECT * FROM :tablename WHERE objectID= :objectID LIMIT 1";		
+		if(!$this->isTablenameValid($this->tablename))
+			return;
+		
+		$tablename = $this->tablename;
+		$sql = "SELECT * FROM $tablename WHERE objectID= :objectID ";		
 		$stmtA = $this->PDOconn->prepare($sql);
-		$paramsA[':tablename'] = $this->tablename;
 		$paramsA[':objectID'] = $this->ID;
 		$stmtA->execute($paramsA);
 		
@@ -33,6 +35,19 @@ class CDObject
 		
 		//Set the row
 		$this->row = $stmtA->fetch();
+	}
+	
+	private function isTablenameValid()
+	{
+	    $sql = "SELECT tablename FROM validtable WHERE tablename=:tablename";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':tablename'] = $this->tablename;
+		$stmtA->execute($paramsA);
+		
+		if($stmtA->rowCount() > 0)
+			return true;
+			
+		return false;
 	}
 }
 

@@ -3,13 +3,14 @@ include_once('/var/www/html/api/obj/CDObject.php');
 
 class User extends CDObject
 {
-	public User($identifier = NULL)
+	//Class constructor
+	function User($identifier = NULL)
 	{
 		//Call super constructor
 		parent::CDObject('user');
-	
+
 		//Try to identify the user
-		if($identifier = NULL)
+		if($identifier == NULL)
 			return;
 			
 			//First try to search by ID
@@ -44,16 +45,9 @@ class User extends CDObject
 				return;
 			}
 	}
+
 	
-	public getName()
-	{
-		$name = array();
-		$name['fName'] = $this->row['fName'];
-		$name['lName'] = $this->row['lName'];
-		$name['fullName'] = $name['fName']." ".$name['lName'];
-		
-		return $name;
-	}
+	
 }
 
 ?>
