@@ -37,6 +37,28 @@ class CDObject
 		$this->row = $stmtA->fetch();
 	}
 	
+	//Generates an objectID that isn't in the table
+	public function generateUniqueID()
+	{
+		if(!$this->isTablenameValid($this->tablename))
+			return false;
+		
+		$tablename = $this->tablename;
+		while(true)
+		{
+			$objectID = $this->tablename.'_'.CDTools::randString(32);
+			$sql = "SELECT objectID FROM $tablename WHERE objectID=:objectID";
+			$stmtA = $this->PDOconn->prepare($sql);
+			$paramsA[':objectID'] = $objectID;
+			
+			if($stmtA->rowCount() == 0)
+				return $objectID;
+				
+			unset($stmtA);
+			unset($paramsA);
+		}
+	}
+	
 	private function isTablenameValid()
 	{
 	    $sql = "SELECT tablename FROM validtable WHERE tablename=:tablename";
