@@ -1,6 +1,6 @@
 <?
 //Include connection
-include_once('/var/www/html/src/setup.php');
+include_once('/var/www/html/src/php/setup.php');
 
 class CDObject
 {

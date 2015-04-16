@@ -5,9 +5,9 @@
 
 
     //Includes
-	include_once('/var/www/html/src/httpstatus.php');
-	include_once('/var/www/html/src/connection.php');
-	include_once('/var/www/html/src/CDTools.php');
+	include_once('/var/www/html/src/php/httpstatus.php');
+	include_once('/var/www/html/src/php/connection.php');
+	include_once('/var/www/html/src/php/CDTools.php');
 	
 	//Set default timezone
 	date_default_timezone_set('America/Los_Angeles');

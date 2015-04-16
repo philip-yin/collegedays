@@ -11,18 +11,27 @@
 		Check to see if a user exists already using the email,
 		if not, create a new user
 	*/
-	include_once('/var/www/html/src/setup.php');
+	include_once('/var/www/html/src/php/setup.php');
 	include_once('/var/www/html/api/user/obj/User.php');
 	
 	$response = array();
 	$response[0]['time'] = time();
 	$response[0]['status'] = 0;
   
-	//Get the lat and lng provided via POST
-	$fName = $_GET['fName'];
-	$lName = $_GET['lName'];
-	$email = $_GET['email'];
-	$password = $_GET['password'];
+	//Get the lat and lng provided via GET http://gocollegedays.com/api/user/index.php?fName=Jick&lName=Joss
+	$fName = $_POST['fName'];
+	$lName = $_POST['lName'];
+	$email = $_POST['email'];
+	$password = $_POST['password'];
+
+	//If no values from POST, get values from GET
+	if(!isset($fName) || !isset($lName) || !isset($email) || !isset($password))
+	{
+		$fName = $_GET['fName'];
+		$lName = $_GET['lName'];
+		$email = $_GET['email'];
+		$password = $_GET['password'];
+	}
 
 	//Does a user exist already?
 	$User = new User($email);

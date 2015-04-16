@@ -94,6 +94,27 @@ class User extends CDObject
 		return $successI;
 	}
 	
+	public function usesPassword($password = '')
+	{
+		if($password == '' || !$this->exists)
+			return false;
+
+		//Refresh the user
+		$this->refresh();
+
+		//Get the password salt for the user
+		$passSalt = $this->row['passSalt'];
+
+		//Create a test password hash
+		$passHash = hash('sha256', $password.$passSalt);
+
+		//Does it equal the user's password hash?
+		if(!($passHash == $this->row['passHash']))
+			return false; //Incorrect password
+
+		//The password resolved to the correct 
+		return true;
+	}
 	
 }
 
