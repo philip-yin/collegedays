@@ -23,6 +23,9 @@
 		$meta['type'] = 'user/create';
 		$meta['status'] = 0;
 
+	//Add the meta
+	$response['meta'] = $meta;
+		
 	//Get the values
 	$fName = $_POST['fName'];
 	$lName = $_POST['lName'];

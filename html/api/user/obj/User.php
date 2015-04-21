@@ -46,6 +46,7 @@ class User extends CDObject
 			}
 	}
 
+	//Creates a new user, returns true if successful
 	public function create($fName, $lName, $email, $password)
 	{		
 		if($this->exists)
@@ -94,6 +95,46 @@ class User extends CDObject
 		return $successI;
 	}
 	
+	//Returns the matchID of the current user's match
+	public function getCurrentMatchID()
+	{
+		/*
+							Get the match here
+							  |
+							  V
+					  min           max	
+		|             |             |             |
+		12am yday     12am tday     12am tmrw      
+		
+		*/
+		
+		//Get bounding timestamps
+		$minTime = strtotime("midnight", time());
+		$maxTime = strtotime("tomorrow", $minTime) - 1;
+		
+		//Search for a match that involves the user and is within the max and min timestamps (today)
+		$sql = "SELECT objectID FROM mach WHERE (userID_a=:userID_1 OR userID_b=:userID_2) AND 
+				(creationTime >= :minTime AND creationTime <= :maxTime) LIMIT 1";
+				
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':minTime'] = $minTime;
+		$paramsA[':maxTime'] = $maxTime;
+		$paramsA[':userID_1'] = $this->ID;
+		$paramsA[':userID_2'] = $this->ID;
+		$stmtA->execute($paramsA);
+		
+		//If there was a result
+		if($stmtA->rowCount() > 0)
+		{
+			$row = $stmtA->fetch();
+			return $row['objectID'];
+		}
+		
+		//Return blank id
+		return '';
+	}
+	
+	//Returns true or false if the user uses the password
 	public function usesPassword($password = '')
 	{
 		if($password == '' || !$this->exists)
