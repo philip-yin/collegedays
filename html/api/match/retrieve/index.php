@@ -57,10 +57,10 @@
 	if($matchID == '' && !$Match->exists)
 	{
 		//Find a new user to match with the viewing user
-		$User_b = new User( $Match->find( $User->ID ) );
+		$userID_b = $Match->findMatchForUserID( $User->ID );
 		
 		//Create a match with this user
-		$Match->create($User->ID, $User_b->ID);
+		$Match->create($User->ID, $userID_b);
 	}
 
 	//Add this match to data

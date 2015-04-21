@@ -32,7 +32,7 @@ class Match extends CDObject
 	}
 
 	//Find a possible match for the user and return a userID
-	public function find($userID_a = '')
+	public function findMatchForUserID($userID_a = '')
 	{
 		//Get the user
 		$User_a = new User($userID_a);
