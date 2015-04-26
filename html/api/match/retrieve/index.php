@@ -56,11 +56,13 @@
 	//If the matchID is empty and the match doesn't exist
 	if($matchID == '' && !$Match->exists)
 	{
+	
 		//Find a new user to match with the viewing user
 		$userID_b = $Match->findMatchForUserID( $User->ID );
 		
 		//Create a match with this user
 		$Match->create($User->ID, $userID_b);
+		
 	}
 
 	//Add this match to data
