@@ -33,7 +33,7 @@
 	
 	if(! $User->exists)
 	{
-		$response[1]['reason'] = "Incorrect password or email.";
+		$response['data']['reason'] = "Incorrect password or email.";
 		sendResponse(400, json_encode($response));
 		return false;
 	}
@@ -41,7 +41,7 @@
 	//Correct password?
 	if(! $User->usesPassword($password))
 	{
-		$response[1]['reason'] = "Incorrect password or email.";
+		$response['data']['reason'] = "Incorrect password or email.";
 		sendResponse(400, json_encode($response));
 		return false;
 	}
@@ -51,7 +51,7 @@
 	$_SESSION['userID'] = $User->ID;
 
 	//Set the status to 1 (success)
-	$response[0]['status'] = 1;
+	$response['meta']['status'] = 1;
 
 	//Send the response
 	sendResponse(200, json_encode($response));
