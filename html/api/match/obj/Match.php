@@ -67,7 +67,9 @@ class Match extends CDObject
 	
 	//Create a new match between the two users, returns the matchID of the newly created match
 	public function create($userID_a = '', $userID_b = '')
-	{	
+	{
+
+		echo "We're in the create function!".$userID_a." ! ". $userID_b ." !";	
 		//Ensure this match doesn't exist
 		if($this->exists)
 			return false;
