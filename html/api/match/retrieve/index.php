@@ -67,7 +67,7 @@
 		while($stillMatching){
 			$nextUser = new User($nextRow);
 
-			if (!$nextUser -> row['currentlyMatched'] && !areMatched($User->ID,$nextUser-> ID)){
+			if (!$nextUser -> row['currentlyMatched'] && !$Match.areMatched($User->ID,$nextUser-> ID)){
 				$newMatch = new Match();
 				$newMatch->create($User->ID,$nextUser-> ID);
 				$stillMatching = false;
