@@ -84,6 +84,15 @@ class Match extends CDObject
 		//Ensure the users are not friends
 		
 		//Insert match into table
+		//Create user
+		$sql = "INSERT INTO mach (objectID, userID_a, userID_b, creationTime) VALUES
+								 (:objectID, :userID_a, :userID_b, :creationTime)";
+		$stmtI = $this->PDOconn->prepare($sql); 
+		$paramsI[':objectID'] = $this->generateUniqueID();
+		$paramsI[':userID_a'] = $userID_a;
+		$paramsI[':userID_b'] = $userID_b;
+		$paramsI[':creationTime'] = time();
+		$stmtI -> execute($paramsI);
 	
 		//Increment the user's match count
 		
