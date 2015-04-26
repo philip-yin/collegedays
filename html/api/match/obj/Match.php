@@ -42,13 +42,13 @@ class Match extends CDObject
 			return false;
 	
 		//Find a user to match with
-		
+			//THIS IS WHERE WE GENERATE A MATCH
 		
 		//Create the match
 		$this->create($userID_a, $userID_b);
 	}
 	
-	//Create a new match between the two users
+	//Create a new match between the two users, returns the matchID of the newly created match
 	public function create($userID_a = '', $userID_b = '')
 	{	
 		//Ensure this match doesn't exist
@@ -67,6 +67,9 @@ class Match extends CDObject
 		//Insert match into table
 	
 		//Increment the user's match count
+		
+		//Return the new matchID
+		return '';
 	}
 	
 }

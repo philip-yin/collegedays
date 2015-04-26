@@ -13,10 +13,11 @@
 	include_once('/var/www/html/api/user/obj/User.php');
 	
 	$response = array();
-	$response[0]['time'] = time();
-	$response[0]['status'] = 0;
+	
+	$response['meta']['time'] = time();
+	$response['meta']['status'] = 0;
   
-	//Get the lat and lng provided via GET http://gocollegedays.com/api/user/index.php?fName=Jick&lName=Joss
+	//Get the email and password
 	$email = $_POST['email'];
 	$password = $_POST['password'];
 
