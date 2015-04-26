@@ -63,6 +63,7 @@
 		if( $nextRow == $User -> row['row'])
 			$nextRow++;
 
+		$stillMatching = true;
 		while($stillMatching){
 			$nextUser = new User($nextRow);
 
@@ -74,7 +75,7 @@
 			}
 			if ($count > $rowsintable)
 				$stillMatching = false;
-			
+
 			$count++;
 			
 
