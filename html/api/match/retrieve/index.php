@@ -57,11 +57,28 @@
 	if($matchID == '' && !$Match->exists)
 	{
 	
-		//Find a new user to match with the viewing user
-		$userID_b = $Match->findMatchForUserID( $User->ID );
-		
-		//Create a match with this user
-		$Match->create($User->ID, $userID_b);
+		$lastRow = $User -> row['lastRow'];
+		$nextRow = $lastRow++;
+
+		if( $nextRow == $User -> row['row'])
+			$nextRow++;
+
+		while($stillMatching){
+			$nextUser = new User($nextRow);
+
+			if (!$nextUser -> row['currentlyMatched'] && !Match::areMatched($User->ID,$nextUser-> ID)){
+				$newMatch = new Match();
+				$newMatch->create($User->ID,$nextUser-> ID);
+				$stillMatching = false;
+
+			}
+			if ($count > $rowsintable)
+				$stillMatching = false;
+			
+			$count++;
+			
+
+		} 
 		
 	}
 
