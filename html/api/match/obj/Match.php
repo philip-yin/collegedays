@@ -48,6 +48,23 @@ class Match extends CDObject
 		$this->create($userID_a, $userID_b);
 	}
 	
+	static public function areMatched($userID_a, $userID_b)
+	{
+		$sql = "SELECT * FROM mach WHERE (userID_a = :userID_a1 OR userID_b = :userID_b1)
+				OR (userID_a = :userID_b2 OR userID_b = :userID_a2)";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':userID_a1'] = $userID_a;
+		$paramsA[':userID_a2'] = $userID_a;
+		$paramsA[':userID_b1'] = $userID_b;
+		$paramsA[':userID_b2'] = $userID_b;
+		$stmtA->execute($paramsA);
+	
+		if($stmtA->rowCount() > 0)
+			return true;
+			
+		return false;
+	}
+	
 	//Create a new match between the two users, returns the matchID of the newly created match
 	public function create($userID_a = '', $userID_b = '')
 	{	

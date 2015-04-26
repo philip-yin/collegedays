@@ -32,7 +32,7 @@
 	$email = $_POST['email'];
 	$password = $_POST['password'];
 
-	/* DONT USE GET
+
 	//If no values from POST, get values from GET
 	if(!isset($fName) || !isset($lName) || !isset($email) || !isset($password))
 	{
@@ -40,7 +40,7 @@
 		$lName = $_GET['lName'];
 		$email = $_GET['email'];
 		$password = $_GET['password'];
-	}*/
+	}
 
 	//Does a user exist already?
 	$User = new User($email);
