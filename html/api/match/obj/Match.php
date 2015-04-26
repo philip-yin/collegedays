@@ -48,7 +48,7 @@ class Match extends CDObject
 		$this->create($userID_a, $userID_b);
 	}
 	
-	static public function areMatched($userID_a, $userID_b)
+	public function areMatched($userID_a, $userID_b)
 	{
 		$sql = "SELECT * FROM mach WHERE (userID_a = :userID_a1 OR userID_b = :userID_b1)
 				OR (userID_a = :userID_b2 OR userID_b = :userID_a2)";
