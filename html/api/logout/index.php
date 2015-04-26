@@ -14,8 +14,8 @@
 	
 	//Build response	
 	$response = array();
-	$response[0]['time'] = time();
-	$response[0]['status'] = 0;
+	$response['meta']['time'] = time();
+	$response['meta']['status'] = 0;
   
 	//Destroy any sessions
 	session_start();
@@ -26,7 +26,7 @@
 	session_destroy();
 	
 	//Set the status to 1 (success)
-	$response[0]['status'] = 1;
+	$response['meta']['status'] = 1;
 
 	//Send the response
 	sendResponse(200, json_encode($response));
