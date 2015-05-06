@@ -74,13 +74,13 @@
 		$lastRow = $User->row['lastRow'];
 		$nextRow = $lastRow++;
 
-		//Skip if self
-		if($nextRow == $User->row['row'])
-			$nextRow++;
-			
 		$stillMatching = true;
 		while($stillMatching)
 		{
+			//Skip if self
+			if($nextRow == $User->row['row'])
+			$nextRow++;
+			
 			if($nextRow > $rowsintable)
 			$nextRow = 0;
 		

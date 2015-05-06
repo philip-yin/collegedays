@@ -74,7 +74,7 @@ form
 	height: 15px;
 }
 
-#loginbutton
+#loginbutton, #signupbutton
 {
 	width: 260px;
 	height: 60px;
@@ -88,6 +88,11 @@ form
     -webkit-border-radius: 5px; 
     border-radius: 5px;
     font-size: 20px;
+}
+
+#signupbutton
+{
+	background: #77dbb7;
 }
 
 #signupcontainer, #logoutcontainer
