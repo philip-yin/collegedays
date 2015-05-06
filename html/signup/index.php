@@ -12,35 +12,16 @@
 	<div id="mainContainer" class="ninesixty_container">
 		<?
 			session_start();
+			
+			if(isset($_SESSION['userID']) && $_SESSION['userID'] != '')
+				header('Location: http://gocollegedays.com');
+			
 			include_once('/var/www/html/src/php/setup.php');
-			include_once('/var/www/html/api/user/obj/User.php');
-			include_once('/var/www/html/api/match/obj/Match.php');
-
-			if(isset($_SESSION['userID']))
-			{
-				$User = new User($_SESSION['userID']);
-
-				$matchID = $User->getCurrentMatchID();
-				
-				if($matchID != '')
-					include_once('/var/www/html/src/html/match.html');
-				else
-					include_once('/var/www/html/src/html/unmatched.html');
-					
-				echo "<div id='logoutcontainer'><div id='logoutlink' href='http://gocollegedays.com/api/logout/'>Logout</div></div>";
-			}
-			else
-			{
-				include_once('/var/www/html/src/html/login.html');
-			}			
-
+			include_once('/var/www/html/src/html/signup.html');
 		?>
 
 	</div>
 	<div id="cdbear">
 	</div>
-	
-<script src='/src/js/logout.js'></script>
-	
 </body>
 </html>

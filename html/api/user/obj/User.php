@@ -4,10 +4,10 @@ include_once('/var/www/html/api/obj/CDObject.php');
 class User extends CDObject
 {
 	//Class constructor
-	function User($identifier = NULL)
+	function User($identifier = NULL, $PDOconn = NULL)
 	{
 		//Call super constructor
-		parent::CDObject('user');
+		parent::CDObject('user', $PDOconn);
 
 		//Try to identify the user
 		if($identifier == NULL)
@@ -44,36 +44,86 @@ class User extends CDObject
 				$this->refresh();
 				return;
 			}
+			
+			//Try by row
+			$sql = "SELECT objectID FROM user WHERE row=:row";
+			$stmtC = $this->PDOconn->prepare($sql);
+			$paramsC[':row'] = $identifier;
+			$stmtC->execute($paramsC);
+			
+			if($stmtC->rowCount() > 0)
+			{
+				$row = $stmtC->fetch();
+				$this->ID = $row['objectID'];
+				$this->exists = true;
+				$this->refresh();
+				return;
+			}
 	}
 
 	//Creates a new user, returns true if successful
 	public function create($fName, $lName, $email, $password)
-	{		
+	{	
+		$response[0]['status'] = 0;
+		$response[1]['reason'] = "";
+	
 		if($this->exists)
-			return false; //Already a user
+		{
+			$response[1]['reason'] = 'The user already exists';
+			return $response;
+		}
 		
 		//See if email is valid
 		if(!( filter_var($email, FILTER_VALIDATE_EMAIL)))
-			return false; //Invalid email
+		{
+		    $response[1]['reason'] = 'The email was invalid';
+			return $response;
+		}
 		
 		//See if the password is valid (4 characters)
 		if(strlen($password) < 4)
-			return false;
+		{
+			$response[1]['reason'] = 'Password is too short';
+			return $response;
+		}
 		
 		//Check for an edu email
 		$emailLength = strlen($email);
 		$emailDomain = '';
+		$emailSchool = '';
+		$grabbing = 'domain';
+		
 		$i = $emailLength;
 		while($i > 0)
 		{
 			if($email[$i] == '.')
+				$grabbing = 'school';
+			else if($email[$i] == '@')
 				break;
-				
-			$emailDomain .= $email[$i--];
+			else
+			{
+				if($grabbing == 'domain')
+					$emailDomain .= $email[$i];
+				else
+					$emailSchool .= $email[$i];
+			}
+			
+			$i--;
 		}
 		
 		if($emailDomain != "ude") //edu backwards
-			return false;
+		{
+			$response[1]['reason'] = 'CollegeDays is only for students right now';
+			return $response;
+		}
+		
+		$emailSchool = strtoupper(strrev($emailSchool));
+		
+		if($emailSchool != "UCSD")
+		{
+			$response[1]['reason'] = 'CollegeDays is only for UCSD students right now';
+			return $response;
+		}
 		
 		//Valid data
 		//Create a password salt and hash
@@ -81,18 +131,33 @@ class User extends CDObject
 		$passHash = hash('sha256', $password.$passSalt);
 				
 		//Create user
-		$sql = "INSERT INTO user (objectID, email, fName, lName, passHash, passSalt) VALUES
-								 (:objectID, :email, :fName, :lName, :passHash, :passSalt)";
+		$uniqueID = $this->generateUniqueID();
+		$sql = "INSERT INTO user (objectID, email, school, fName, lName, passHash, passSalt) VALUES
+								 (:objectID, :email, :school, :fName, :lName, :passHash, :passSalt)";
 		$stmtI = $this->PDOconn->prepare($sql); 
-		$paramsI[':objectID'] = $this->generateUniqueID();
+		$paramsI[':objectID'] = $uniqueID;
 		$paramsI[':email'] = $email;
 		$paramsI[':fName'] = $fName;
 		$paramsI[':lName'] = $lName;
 		$paramsI[':passHash'] = $passHash;
 		$paramsI[':passSalt'] = $passSalt;
+		$paramsI[':school'] = $emailSchool;
 		$successI = $stmtI->execute($paramsI);
 		
-		return $successI;
+		if($successI)
+		{
+			$this->ID = $uniqueID;
+			$this->refresh();
+			
+			$sql = "UPDATE user SET lastRow=:lastRow WHERE objectID=:objectID";
+			$stmtN = $this->PDOconn->prepare($sql);
+			$paramsN[':objectID'] = $this->ID;
+			$paramsN[':lastRow'] = $this->row['row'];
+			$stmtN->execute($paramsN);
+		}
+		
+		$response[0]['status'] = 1;
+		return $response;
 	}
 	
 	//Returns the matchID of the current user's match
@@ -111,7 +176,7 @@ class User extends CDObject
 		//Get bounding timestamps
 		$minTime = strtotime("midnight", time());
 		$maxTime = strtotime("tomorrow", $minTime) - 1;
-		
+				
 		//Search for a match that involves the user and is within the max and min timestamps (today)
 		$sql = "SELECT objectID FROM mach WHERE (userID_a=:userID_1 OR userID_b=:userID_2) AND 
 				(creationTime >= :minTime AND creationTime <= :maxTime) LIMIT 1";
@@ -132,6 +197,32 @@ class User extends CDObject
 		
 		//Return blank id
 		return '';
+	}
+	
+	public function refreshMatched()
+	{
+		if($this->getCurrentMatchID() == '')
+			$this->setMatched(false);
+		else
+			$this->setMatched(true);
+	}
+	
+	public function setMatched($matched)
+	{
+		$sql = "UPDATE user SET currentlyMatched=:matched WHERE objectID=:objectID";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':matched'] = (int)$matched;
+		$paramsA[':objectID'] = $this->ID;
+		$stmtA->execute($paramsA);
+	}
+	
+	public function setLastRow($lastChecked)
+	{
+		$sql = "UPDATE user SET lastRow=:lastRow WHERE objectID=:objectID";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':lastRow'] = $lastChecked;
+		$paramsA[':objectID'] = $this->ID;
+		$stmtA->execute($paramsA);
 	}
 	
 	//Returns true or false if the user uses the password

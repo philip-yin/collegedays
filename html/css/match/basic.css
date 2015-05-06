@@ -1,0 +1,33 @@
+#matchcontainer
+{
+	width: 240px;
+	height: 340px;
+	background: #1e1e1e;
+	border-radius: 5px;
+	margin: auto;
+}
+
+#matchimage
+{
+	width: 180px;
+	height: 180px;
+	border-radius: 100px;
+	margin-top: 30px;
+	margin: auto;
+	background: #f4f4f4 url('https://s3-us-west-2.amazonaws.com/greatdays/collegedays_bear_600x200.png') no-repeat center center;
+	background-size: 150px;
+}
+
+#matchname
+{
+	text-align: center;
+	font-size: 20px;
+	color: #f4f4f4;
+	margin-top: 20px;
+	width: 100%; height: 25px;
+}
+
+#matchschool
+{
+	color: #e53855;
+}

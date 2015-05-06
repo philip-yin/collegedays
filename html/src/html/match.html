@@ -1,0 +1,20 @@
+<?
+	$Match = new Match($matchID);
+	$Someone = new User($Match->getNotUserID($User->ID));
+?>
+<link rel="stylesheet" type="text/css" href="/css/match/basic.css">
+<div id="matchcontainer">
+	<div class="verticalspacer" style="height: 30px;"></div>
+
+	<div id="matchimage">
+	</div><!-- matchimage-->
+	
+	<div id="matchname">
+	<? echo $Someone->row['fName']." ".$Someone->row['lName']; ?>
+	</div><!-- matchname-->
+	
+	<div id="matchschool">
+	<? echo $Someone->row['school']; ?>
+	</div><!-- matchschool-->
+	
+</div><!-- matchcontainer-->

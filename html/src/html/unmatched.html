@@ -1,0 +1,47 @@
+<link rel="stylesheet" type="text/css" href="/css/match/unmatched.css">
+Finding a match...
+<div id="unmatchedcontainer">
+	<div class="verticalspacer" id="unmatchedspacer">
+	</div>
+	<div id="unmatcheddot">
+	
+	</div>
+</div>
+<script>
+
+function animateDot()
+{
+	$('#unmatcheddot').animate({width: '100px', height: '100px', borderRadius: '50px', opacity: '0'}, 3000, function() {});
+	$('#unmatchedspacer').animate({height: '0px'}, 3000, function() { resetDot(); });
+}
+
+function resetDot()
+{
+	$('#unmatcheddot').css('width', '0px');
+	$('#unmatcheddot').css('height', '0px');
+	$('#unmatcheddot').css('borderRadius', '0px');
+	$('#unmatcheddot').css('opacity', '1');
+	$('#unmatchedspacer').css('height', '50px');
+}
+
+function getMatch()
+{
+	$.ajax({type: "POST", url: "http://gocollegedays.com/api/match/retrieve", success: function(result)
+	{
+		var response = JSON.parse(result)
+		if(response['meta']['status'] == 1)
+		{
+			//Match found, refresh page
+			location.reload();
+		}
+	}});
+}
+
+setInterval(
+function() {
+    animateDot();
+	getMatch();
+}, 4000);
+
+animateDot();
+</script>

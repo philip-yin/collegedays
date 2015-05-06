@@ -8,6 +8,41 @@ body, html
 
 .ninesixty_container
 {
-	width: 960px;
+	max-width: 960px;
+	padding-left: 0;
+	padding-right: 0;
 	margin: auto;
+}
+
+#cdbear
+{
+	width: 230px;
+	height: 100px;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	background: url('https://s3-us-west-2.amazonaws.com/greatdays/collegedays_bear_600x200.png') no-repeat center bottom;
+	background-size: 180px;
+}
+
+a:link
+{
+	text-decoration: none;
+	color: #151e26;
+}
+
+a:visited
+{
+	color: #151e26;
+}
+
+a:hover
+{
+	color: #151e26;
+	cursor: pointer;
+}
+
+a:active
+{
+	color: #151e26;
 }

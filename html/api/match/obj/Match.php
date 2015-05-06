@@ -65,11 +65,20 @@ class Match extends CDObject
 		return false;
 	}
 	
+	public function getNotUserID($userID)
+	{
+		if($this->row['userID_a'] == $userID)
+			return $this->row['userID_b'];
+		
+		if($this->row['userID_b'] == $userID)
+			return $this->row['userID_a'];
+		
+		return '';
+	}	
+	
 	//Create a new match between the two users, returns the matchID of the newly created match
 	public function create($userID_a = '', $userID_b = '')
 	{
-
-		echo "We're in the create function!".$userID_a." ! ". $userID_b ." !";	
 		//Ensure this match doesn't exist
 		if($this->exists)
 			return false;
@@ -85,19 +94,25 @@ class Match extends CDObject
 		
 		//Insert match into table
 		//Create user
+		$uniqueID = $this->generateUniqueID();
 		$sql = "INSERT INTO mach (objectID, userID_a, userID_b, creationTime) VALUES
 								 (:objectID, :userID_a, :userID_b, :creationTime)";
-		$stmtI = $this->PDOconn->prepare($sql); 
-		$paramsI[':objectID'] = $this->generateUniqueID();
+		$stmtI = $this->PDOconn->prepare($sql);		
+		$paramsI[':objectID'] = $uniqueID;
 		$paramsI[':userID_a'] = $userID_a;
 		$paramsI[':userID_b'] = $userID_b;
 		$paramsI[':creationTime'] = time();
-		$stmtI -> execute($paramsI);
-	
+		$successI = $stmtI->execute($paramsI);
+		
+		if($successI)
+		{
+			$this->ID = $uniqueID;
+			$this->refresh();
+		}
 		//Increment the user's match count
 		
 		//Return the new matchID
-		return '';
+		return $uniqueID;
 	}
 	
 }

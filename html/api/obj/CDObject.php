@@ -10,9 +10,13 @@ class CDObject
 	public $row;
 	public $PDOconn;
 	
-	function CDObject($tablename = '')
+	function CDObject($tablename = '', $PDOconn = NULL)
 	{
-		$this->PDOconn = newPDOconn();
+		if($PDOconn == NULL)
+			$this->PDOconn = newPDOconn();
+		else
+			$this->PDOconn = $PDOconn;
+			
 		$this->ID = '';
 		$this->tablename = $tablename;
 		$this->exists = false;

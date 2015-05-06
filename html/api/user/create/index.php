@@ -53,9 +53,10 @@
 	}
 	
 	//The user doesn't exist yet
-	if(! $User->create($fName, $lName, $email, $password))
+	$createResponse = $User->create($fName, $lName, $email, $password);
+	if($createResponse[0]['status'] == 0)
 	{
-		$response['data']['reason'] = "The user couldn't be created.";
+		$response['data']['reason'] = $createResponse[1]['reason'];
 		sendResponse(400, json_encode($response));
 		return false;
 	}

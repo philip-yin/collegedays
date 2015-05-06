@@ -1,0 +1,23 @@
+#unmatchedcontainer
+{
+	width: 240px;
+	height: 100px;
+	margin: auto;
+
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+#unmatcheddot
+{
+	margin: auto;
+	width: 0px;
+	height: 0px;
+	background: #f4f4f4;
+	border-radius: 0px;
+}
+
+#unmatchedspacer
+{
+	height: 50px;
+}
