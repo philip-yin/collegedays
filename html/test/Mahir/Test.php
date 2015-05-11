@@ -2,11 +2,11 @@
  include _once('/var/www/html/src/php/CDPriorityQueve.php');
 
  $PQ = new CDPriorityQueve();
- $PQ -> inser + ('A',1);
- $PQ -> inser + ('B',4);
- $PQ -> inser + ('C',2);
- $PQ -> inser + ('D',3);
- $PQ -> inser + ('F',10);
+ $PQ -> insert('A',1);
+ $PQ -> insert('B',4);
+ $PQ -> insert('C',2);
+ $PQ -> insert('D',3);
+ $PQ -> insert('F',10);
  echo PQ -> top();
 
 ?>
