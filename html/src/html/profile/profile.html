@@ -12,7 +12,18 @@
 <body>
 	<div id="mainContainer" class="ninesixty_container">
 	
-		<div id = "profile_Picture">
+		<div id = "profile_picture">
+
+		</div>
+
+		<div id = "profile_name">
+			<echo "Name: \n">
+			<? echo $User->row['fName']; ?>
+
+		</div>
+
+		<div id = "profile_description">
+			<echo "this is description">
 
 		</div>
 	Profile for <? echo $User->row['fName']; ?>
