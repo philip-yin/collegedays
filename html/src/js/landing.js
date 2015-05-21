@@ -14,12 +14,12 @@ function trySignup()
 	
 	$('#errorcontainer').html('');
 	
-	$.ajax({type: "POST", url: "http://gocollegedays.com/api/user/create/", data: {email: emailvalue, password: passvalue, fName: firstName, lName: lastName},  error: function(xhr, status, error) {
+	$.ajax({type: "POST", url: "http://gocollegedays.com/api/user/create/", data: {email: emailvalue, password: passvalue, fName: firstName, lName: lastName},  
+	error: function(xhr, status, error) {
 
 		var response = JSON.parse(xhr.responseText);
 		$('#errorcontainer').html(response['data']['reason']);
 	},
-	
 	success: function(result)
 	{
 		var response = JSON.parse(result);

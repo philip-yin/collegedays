@@ -10,7 +10,9 @@
 	</div><!-- matchimage-->
 	
 	<div id="matchname">
-	<? echo $Someone->row['fName']." ".$Someone->row['lName']; ?>
+	<a class="lightLink" href="<? echo $domain.'/user/'.$Someone->ID; ?>">
+		<? echo $Someone->row['fName']." ".$Someone->row['lName']; ?>
+	</a>
 	</div><!-- matchname-->
 	
 	<div id="matchschool">

@@ -5,10 +5,10 @@ include_once('/var/www/html/api/user/obj/User.php');
 class Match extends CDObject
 {
 	//Class constructor
-	function Match($identifier = NULL)
+	function Match($identifier = NULL, $PDOconn = NULL)
 	{
 		//Call super constructor
-		parent::CDObject('mach');
+		parent::CDObject('mach', $PDOconn);
 
 		//Try to identify the user
 		if($identifier == NULL)
@@ -50,19 +50,46 @@ class Match extends CDObject
 	
 	public function areMatched($userID_a, $userID_b)
 	{
-		$sql = "SELECT * FROM mach WHERE (userID_a = :userID_a1 OR userID_b = :userID_b1)
-				OR (userID_a = :userID_b2 OR userID_b = :userID_a2)";
+		$User_a = new User($userID_a, $this->PDOconn);
+		$User_b = new User($userID_b, $this->PDOconn);
+		
+		$matchID_a = $User_a->getCurrentMatchID();
+		
+		//echo "matchID_a: ".$matchID_a;
+			
+			if($matchID_a == '')
+				return false;
+		
+		$matchID_b = $User_b->getCurrentMatchID();
+		
+		if($User_a->getCurrentMatchID() == $User_b->getCurrentMatchID())
+			return true;
+		
+		
+		
+		return false;
+	}
+
+	public function countMatches($userID_a , $userID_b)
+	{
+
+
+		$sql = "SELECT COUNT(*) FROM mach WHERE 
+			(userID_a =:userID_a1 AND userID_b =:userID_b1) OR (userID_a =:userID_b2 AND userID_b =:userID_a2)";
 		$stmtA = $this->PDOconn->prepare($sql);
 		$paramsA[':userID_a1'] = $userID_a;
-		$paramsA[':userID_a2'] = $userID_a;
 		$paramsA[':userID_b1'] = $userID_b;
+		$paramsA[':userID_a2'] = $userID_a;
 		$paramsA[':userID_b2'] = $userID_b;
 		$stmtA->execute($paramsA);
-	
-		if($stmtA->rowCount() > 0)
-			return true;
-			
-		return false;
+		
+		return $stmtA->fetchColumn();
+
+
+
+
+
+
 	}
 	
 	public function getNotUserID($userID)

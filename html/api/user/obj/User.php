@@ -1,5 +1,5 @@
 <?
-include_once('/var/www/html/api/obj/CDObject.php');
+require_once('/var/www/html/api/obj/CDObject.php');
 
 class User extends CDObject
 {
@@ -202,16 +202,16 @@ class User extends CDObject
 	public function refreshMatched()
 	{
 		if($this->getCurrentMatchID() == '')
-			$this->setMatched(false);
+			$this->setMatched(0);
 		else
-			$this->setMatched(true);
+			$this->setMatched(1);
 	}
 	
 	public function setMatched($matched)
 	{
 		$sql = "UPDATE user SET currentlyMatched=:matched WHERE objectID=:objectID";
 		$stmtA = $this->PDOconn->prepare($sql);
-		$paramsA[':matched'] = (int)$matched;
+		$paramsA[':matched'] = $matched;
 		$paramsA[':objectID'] = $this->ID;
 		$stmtA->execute($paramsA);
 	}

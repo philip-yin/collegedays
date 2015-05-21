@@ -12,6 +12,7 @@
 	include_once('/var/www/html/src/php/setup.php');
 	include_once('/var/www/html/api/user/obj/User.php');
 	include_once('/var/www/html/api/match/obj/Match.php');
+	include_once('/var/www/html/src/php/CDPriorityQueue.php');
 
 	//Create the response
 	$response = array();
@@ -50,20 +51,22 @@
 		$matchID = $User->getCurrentMatchID();
 	}
 
-	//Make a match
-	$Match = new Match($matchID);
-	
 	//Make a connection
 	$PDOconn = newPDOconn();
 	
+	//Make a match
+	$Match = new Match($matchID, $PDOconn);
+	
 	//Get the rows in the table
-	$sql = "SELECT COUNT(*) FROM user";
+	$sql = "SELECT row FROM user ORDER BY row DESC LIMIT 1";
 	$stmtA = $PDOconn->prepare($sql);
 	$stmtA->execute();
-	$rowsintable = $stmtA->fetchColumn();
+	$row = $stmtA->fetch();
+	$maxRow = $row['row'];
 	
-	//echo "rows: ".$rowsintable."<br>";
-	
+	$debug = false;
+	// if($debug) echo "rows: ".$rowsintable."<br>";
+	$nextRow = 0;
 	//If the matchID is empty and the match doesn't exist
 	if($matchID == '' && !$Match->exists)
 	{
@@ -74,6 +77,10 @@
 		$lastRow = $User->row['lastRow'];
 		$nextRow = $lastRow++;
 
+		//making a PQ
+		$PQ = new CDPriorityQueue();
+
+
 		$stillMatching = true;
 		while($stillMatching)
 		{
@@ -81,43 +88,49 @@
 			if($nextRow == $User->row['row'])
 			$nextRow++;
 			
-			if($nextRow > $rowsintable)
+			if($nextRow > $maxRow)
 			$nextRow = 0;
 		
 			$nextUser = new User($nextRow, $PDOconn);
 			$nextUser->refreshMatched();
 			
-			//echo "Checking user at row ".$nextRow." ";
-			//echo " exists: ".$nextUser->exists."<br>";
 			if($nextUser->exists)
 			{
+				$matchCount = $Match->countMatches($User->ID, $nextUser->ID);
+
 				//Found someone to match with
-				if ($nextUser->row['currentlyMatched'] == 0 && ! $Match->areMatched($User->ID, $nextUser->ID))
+				if ($matchCount == 0 && $nextUser->row['currentlyMatched'] == 0 )//&& !$Match->areMatched($User->ID, $nextUser->ID))
 				{
-					$newMatch = new Match();
+					if($debug) echo "Creating a match with ".$nextUser->row['fName']." (".$nextRow.") <br>";
+					$newMatch = new Match('', $PDOconn);
 					$newMatch->create($User->ID, $nextUser->ID);
+					// if($debug) echo "Match created...";
 					
 					$User->setMatched(true);
 					$User->setLastRow($nextRow);
 					$nextUser->setMatched(true);
 					
-					//echo("Created match...");
+
 					$Match = $newMatch;
 					
 					$stillMatching = false;
 				}
-				else
+				else if($nextUser -> row['currentMatched'] == 0)//if they are not matched and we could not match them
 				{
-					//echo " not a match... <br>";
+					if($debug) echo "Inserting ".$nextUser->row['fName']." with priority of ".$matchCount."<br>";
+					$PQ -> insert($nextUser -> ID, $matchCount);
 				}
-				
+			}
+			else
+			{
+				// if($debug) echo " didnt exist...";
 			}
 			
-			if ($count > $rowsintable)
-			$stillMatching = false;
+			if ($count > $maxRow)
+			 $stillMatching = false;
 			
-			$nextRow++;
 			$count++;
+			$nextRow++;
 		} 
 	}
 	else
@@ -125,6 +138,26 @@
 		//The user is matched
 		$User->setMatched(true);
 	}
+
+    if($Match->ID == '' && $PQ->count() > 0)
+    {
+    	$matchingUserID = $PQ->top();
+    	$newUser = new User($matchingUserID, $PDOconn);
+		
+    	if($debug) echo "Popped ".$newUser->row['fName'].", making a match...";
+		$newMatch = new Match('', $PDOconn);
+		// if($debug) echo "have new match.";
+		$newMatch->create($User->ID, $matchingUserID);
+		// if($debug) echo "Match created...";
+					
+		$User->setMatched(true);
+		$User->setLastRow($nextRow);
+		$newUser->setMatched(true);
+					
+
+		$Match = $newMatch;
+    }
+
 
 	//Add this match to data
 	$response['data']['matchID'] = $Match->ID;

@@ -25,24 +25,12 @@ body, html
 	background-size: 180px;
 }
 
-a:link
-{
-	text-decoration: none;
-	color: #151e26;
-}
+.lightLink:link { text-decoration: none; color: #f4f4f4; }
+.lightLink:visited { color: #f4f4f4; }
+.lightLink:hover { color: white; }
+.lightLink:active { color: #f4f4f4; }
 
-a:visited
-{
-	color: #151e26;
-}
-
-a:hover
-{
-	color: #151e26;
-	cursor: pointer;
-}
-
-a:active
-{
-	color: #151e26;
-}
+a:link { text-decoration: none; color: #151e26; }
+a:visited { color: #151e26; }
+a:hover { color: #151e26; cursor: pointer; }
+a:active { color: #151e26; }
