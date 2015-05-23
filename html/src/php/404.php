@@ -45,12 +45,18 @@ if($type == 'user')
 	if($User->exists)
 	{
 		//Show profile
-		require_once('/var/www/html/src/html/profile/profile.html');
+		$title = $User->row['fName']." ".$User->row['lName'];
+		$content = '/var/www/html/src/html/profile/profile.html';
+		require_once('/var/www/html/src/html/blank.html');
 		return true;
 	}
 	else
 		pageNotFound();
 }
+else
+	pageNotFound();
+	
+return;
 
 function pageNotFound()
 {

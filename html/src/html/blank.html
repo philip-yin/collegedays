@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="/css/basic.css">
+	<link rel="stylesheet" type="text/css" href="/css/blank.css">
+
+	<link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
+	<title><? echo $title; ?></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+</head>
+<body>
+	
+	<div id="mainContainer" class="ninesixty_container">
+	<? if($content != '') require_once($content); ?>
+	</div><!-- mainContainer-->
+	
+	<div id="cdbear">
+	</div>
+
+</body>
+	<script src='/src/js/logout.js'></script>	
+</html>

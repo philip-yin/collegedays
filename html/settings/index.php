@@ -19,7 +19,7 @@
 	if(!isset($User))
 	$User = new User($_SESSION['userID'], $PDOconn);
 
-	$title = 'You';
-	$content = '/var/www/html/src/html/profile/profile.html';
+	$title = 'Settings';
+	$content = '/var/www/html/src/html/settings/settings.html';
 	require_once('/var/www/html/src/html/blank.html');
 ?>

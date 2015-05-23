@@ -1,0 +1,17 @@
+#settings_red, .settings_blue
+{
+	width: 50px; height: 50px;
+	margin: auto;
+}
+
+#settings_red
+{
+	background: red;
+	color: white;
+}
+
+.settings_blue
+{
+	background: blue;
+	color: orange;
+}

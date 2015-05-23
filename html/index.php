@@ -1,46 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<link rel="stylesheet" type="text/css" href="/css/basic.css">
-	<link rel="stylesheet" type="text/css" href="/css/landing.css">
-	<link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
-	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-	<script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-	<div id="mainContainer" class="ninesixty_container">
-		<?
-			session_start();
-			include_once('/var/www/html/src/php/setup.php');
-			include_once('/var/www/html/api/user/obj/User.php');
-			include_once('/var/www/html/api/match/obj/Match.php');
+<?
+	session_start();
+	include_once('/var/www/html/src/php/setup.php');
+	include_once('/var/www/html/api/match/obj/Match.php');
 
-			if(isset($_SESSION['userID']))
-			{
-				$User = new User($_SESSION['userID']);
+	if(isset($_SESSION['userID']))
+	{
+		$User = new User($_SESSION['userID']);
 
-				$matchID = $User->getCurrentMatchID();
-				
-				if($matchID != '')
-					include_once('/var/www/html/src/html/match.html');
-				else
-					include_once('/var/www/html/src/html/unmatched.html');
-					
-				echo "<div id='logoutcontainer'><div id='logoutlink' href='http://gocollegedays.com/api/logout/'>Logout</div></div>";
-			}
-			else
-			{
-				include_once('/var/www/html/src/html/login.html');
-			}			
+		$matchID = $User->getCurrentMatchID();
+		
+		if($matchID != '')
+		{
+			$content = '/var/www/html/src/html/home/home.html';
+		}
+		else
+		{
+			$content = '/var/www/html/src/html/home/unmatched.html';
+		}
 
-		?>
+		require_once('/var/www/html/src/html/blank.html');
+		echo "<div id='logoutcontainer'><div id='logoutlink' href='http://gocollegedays.com/api/logout/'>Logout</div></div>";
+		echo "<script src='/src/js/logout.js'></script>";		
+	}
+	else
+	{
+		$content = '/var/www/html/src/html/login/login.html';
+		require_once('/var/www/html/src/html/blank.html');
+	}
 
-	</div>
-	<div id="cdbear">
-	</div>
-	
-<script src='/src/js/logout.js'></script>
-	
-</body>
-</html>
+?>
