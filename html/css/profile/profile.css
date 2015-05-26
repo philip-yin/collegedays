@@ -8,6 +8,13 @@
 
 }
 
+#profile_picture img {
+   display: block;
+   width: 100%;
+   height: 100%;
+
+}
+
 #profile_name
 {
 
@@ -16,6 +23,29 @@
 
 #profile_description
 {
+
+
+}
+.button {
+      appearance: button;
+      -moz-appearance: button;
+      -webkit-appearance: button;
+      text-decoration: none; 
+      font: menu; 
+      color: ButtonText;
+      display: inline-block; 
+      padding: 4px 35px;
+
+}
+
+.info{
+	background: white;
+	width: 200px;
+	height: 100px;
+	margin: auto;
+	border-style: solid;
+	border-color: black;
+    border-width: 5px;
 
 
 }
