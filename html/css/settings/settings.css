@@ -8,6 +8,13 @@
 {
 	background: red;
 	color: white;
+} 
+
+h1 {
+  color: block;
+  font-family: 'Shift', sans-serif;
+  font-size: 48px;
+  font-variant: small-caps;
 }
 
 .settings_blue
@@ -15,3 +22,8 @@
 	background: blue;
 	color: orange;
 }
+
+.custom {
+	width: 220px;
+}
+

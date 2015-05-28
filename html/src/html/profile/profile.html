@@ -1,35 +1,20 @@
 <link rel="stylesheet" type="text/css" href="/css/profile/profile.css">
 
-<div id = "profile_picture">
-	<img src = "http://sd.keepcalm-o-matic.co.uk/i/ugly-baby-be-like-hi-person-idk.png" alt = "" />
+<? require_once('/var/www/html/src/html/header.html'); ?>
 
-</div>
+    <div id="user_block">
 
-<br>
+		<div id="profile_picture"></div><!-- profile-picture -->
+		
+        <h3 id="profile_name">
+			<? echo $User->row['fName']." ".$User->row['lName']; ?>
+		</h3>
 
-<div id = "profile_name" class = "info">
-	Name:&nbsp;
-<? echo $User->row['fName']." ".$User->row['lName']; ?>
-
-
-</div>
-
-<br>
-
-<div id = "profile_description" class = "info">
-	this is description
-</div>
-
- <br>
-
- <a href="http://gocollegedays.com/friends/" class="button">
- 	Friends
- </a>
-
- <a href="http://gocollegedays.com/you/" class="button">
- 	You
- </a>
-
-
-
+		<div id="profile_description">
+			No description
+		</div>
 	
+    </div>
+	
+<? require_once('/var/www/html/src/html/footer.html');?>
+

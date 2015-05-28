@@ -1,0 +1,19 @@
+<div>
+  <a href="http://gocollegedays.com/friends/" class="btn btn-default">
+ 	Friends
+  </a>
+
+  <a href="http://gocollegedays.com/" class = "btn btn-default">
+ 	Home
+  </a>
+
+  <a href="http://gocollegedays.com/you/" class="btn btn-default">
+	<? echo $User->row['fName']; ?>
+  </a>
+</div>
+<div id='logoutcontainer'>
+  <div id='logoutlink' href='http://gocollegedays.com/api/logout/'>Logout
+  </div>
+</div>
+<script src='/src/js/logout.js'></script>
+</div>

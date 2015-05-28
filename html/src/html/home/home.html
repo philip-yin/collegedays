@@ -3,29 +3,62 @@
 	$Someone = new User($Match->getNotUserID($User->ID));
 ?>
 <link rel="stylesheet" type="text/css" href="/css/match/basic.css">
-<div id="matchcontainer">
-	<div class="verticalspacer" style="height: 10px;"></div>
 
-	<div id="matchimage">
-	</div><!-- matchimage-->
-	
-	<div id="matchname">
-	<a class="lightLink" href="<? echo $domain.'/user/'.$Someone->ID; ?>">
-		<? echo $Someone->row['fName']." ".$Someone->row['lName']; ?>
-	</a>
-	</div><!-- matchname-->
-	
-	<div id="matchschool">
-	<? echo $Someone->row['school']; ?>
-	</div><!-- matchschool-->
+<link rel="stylesheet" type="text/css" href="/css/home/home.css">
 
-	<div id="hello" class = "button">
-	<a href = "#"><b>HELLO!</b></a>
-	</div><!-- hello-->
+<? require_once('/var/www/html/src/html/header.html');?>
 
-	<div id="nothanks" class = "button">
-	<a href = "#"><b>No, thanks.</b></a>
-	</div><!-- nothanks-->
+<div class="row">
+  <div class="col-sm-6 col-md-4"></div>
+  <div class="col-sm-6 col-md-4">
+    <div class="thumbnail" style="background:grey;">
+      <br>
+      <img id="matchimage" class="img-circle">
+      <div class="caption">
+        <h3>
+      	  <a class="lightLink" href="<? echo $domain.'/user/'.$Someone->ID; ?>">
+		    <? echo $Someone->row['fName']." ".$Someone->row['lName']; ?>
+	      </a>
+        </h3>
+        <p style="color:white;">
+      	  <? echo $Someone->row['school']; ?>
+        </p>
 
-	
-</div><!-- matchcontainer-->
+<?
+
+		$isA = $Match->isA($Viewer->ID);
+		$isB = !$isA;
+
+		$saidHiA = $Match->row['hi_a'];
+		$saidHiB = $Match->row['hi_b'];
+
+		if(($saidHiA == 0 && $isA) || ($saidHiB == 0 && $isB))
+		{
+
+		echo '
+			<div id="hello_button" class = "btn btn-oval btn-default">
+			 <b>HELLO!</b>
+			</div><!-- hello-->
+
+			<div id="nothanks" class = "btn btn-oval btn-default">
+			  <a href = "#"><b>No, thanks.</b></a>
+			</div><!-- nothanks-->';
+		}
+		else if (($saidHiA + $saidHiB) == 1)
+		{
+			echo '<div>PENDING</div>';
+		}
+		else
+		{
+			echo '<div> You are friends. </div>';
+		}
+		
+?>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-4"></div>
+</div>
+	<? require_once('/var/www/html/src/html/footer.html');?>
+	<script src = "/src/js/home/home.js"></script>

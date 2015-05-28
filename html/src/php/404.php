@@ -1,5 +1,5 @@
 <?
-
+session_start();
 $URL = $_SERVER["REQUEST_URI"];
 
 //echo $URL."<br>";
@@ -42,6 +42,10 @@ if($type == 'user')
 	//DISPLAY THE RESTAURANT
 	$userID = $view;
 	$User = new User($userID);
+	
+	$viewerID = $_SESSION['userID'];
+	$Viewer = new User($viewerID);
+	
 	if($User->exists)
 	{
 		//Show profile

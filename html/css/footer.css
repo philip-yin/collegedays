@@ -1,0 +1,45 @@
+#buttons_container
+{
+	width: 280px; height: 40px;
+	background: red;
+	border: 0px;
+	margin: auto;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.footer_button
+{
+	width: 50%;
+	padding-top: 8px;
+	height: 100%;
+	float: left;
+	color: #f4f4f4;
+	font-weight: bold;
+	text-shadow: #3d3d3d 0px 1px;
+}
+
+.footer_button:hover
+{
+	cursor: pointer; color: white;
+}
+
+#footer_home
+{
+	background: #77dbb7;
+}
+
+	#footer_home:hover{ background: #85e0bd; } 
+
+#footer_profile
+{
+	background: #3a3a3a; 
+}
+	#footer_profile:hover{ background: #474747; }
+	
+#footer_friends
+{
+	background: #e53855;
+}
+	#footer_friends:hover{ background: #e8496b; }
+	

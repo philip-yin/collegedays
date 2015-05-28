@@ -1,6 +1,6 @@
 
-$("#logoutlink").click(function(){
-    event.preventDefault();
+$('#logoutcontainer').click(function(){
+	event.preventDefault();
     tryLogout();
 });
 

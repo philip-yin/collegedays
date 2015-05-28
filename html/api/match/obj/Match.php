@@ -47,6 +47,60 @@ class Match extends CDObject
 		//Create the match
 		$this->create($userID_a, $userID_b);
 	}
+
+	public function sayHi($userID)
+	{
+		$User = new User($userID);
+		$matchID = $User->getCurrentMatchID();
+		
+		$isA = $this->isA($userID);
+		$isB = !$isA;
+		
+		$sql = "UPDATE mach SET hi_a='1' WHERE objectID=:machID";
+		if($isB) $sql = "UPDATE mach SET hi_b='1' WHERE objectID=:machID";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':machID'] = $this->ID;
+		return $stmtA->execute($paramsA);
+	}
+	
+	public function isA($userID)
+	{
+		$sql = "SELECT userID_a FROM mach WHERE objectID=:matchID";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':matchID'] = $this->ID;
+		$stmtA->execute($paramsA);
+		
+		if($stmtA->rowCount() == 0)
+			return false;
+			
+		$row = $stmtA->fetch();
+		if($row['userID_a'] == $userID)
+			return true;
+			
+		return false;
+	}
+	
+	public function isB($userID)
+	{
+		$sql = "SELECT userID_b FROM mach WHERE objectID=:matchID";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':matchID'] = $this->ID;
+		$stmtA->execute($paramsA);
+		
+		if($stmtA->rowCount() == 0)
+			return false;
+			
+		$row = $stmtA->fetch();
+		if($row['userID_b'] == $userID)
+			return true;
+			
+		return false;
+	}
+	
+	public function containsMatch()
+	{
+	    
+	}
 	
 	public function areMatched($userID_a, $userID_b)
 	{
@@ -84,11 +138,6 @@ class Match extends CDObject
 		$stmtA->execute($paramsA);
 		
 		return $stmtA->fetchColumn();
-
-
-
-
-
 
 	}
 	

@@ -18,7 +18,8 @@
 	//Make user
 	if(!isset($User))
 	$User = new User($_SESSION['userID'], $PDOconn);
-
+	$Viewer = $User;
+	
 	$title = 'Settings';
 	$content = '/var/www/html/src/html/settings/settings.html';
 	require_once('/var/www/html/src/html/blank.html');

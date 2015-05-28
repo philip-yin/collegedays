@@ -1,0 +1,28 @@
+<link rel="stylesheet" type="text/css" href="/css/footer.css">
+<div class="vertical_spacer" style="height: 15px"></div>
+
+<div id="buttons_container">
+
+<?
+  if(!$isHome)
+  echo '
+  <div href="http://gocollegedays.com/" id="footer_home" class="footer_button">Home</div>';
+?>
+
+<? if(!$isYou)
+   echo '
+   <div href="http://gocollegedays.com/you/" id="footer_profile" class="footer_button">'.$Viewer->row['fName'].'</div>';
+?>
+
+<? if(!$isFriends)
+   echo '
+   <div href="http://gocollegedays.com/friends/" id="footer_friends" class="footer_button">Friends</div>';
+?>
+</div>
+
+<div id='logoutcontainer'>
+  <div id='logoutlink'>Logout</div>
+</div>
+
+<script src='/src/js/logout.js'></script>
+<script src='/src/js/footer/footer.js'></script>

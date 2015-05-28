@@ -1,29 +1,81 @@
+<?
+//note: this doesn't consider duplicate matches
+//this will be moved later
+require_once('/var/www/html/src/php/setup.php');
+require_once('/var/www/html/api/match/obj/Match.php');
+
+//if there isn't a database connection, make one
+if(!isset($PDOconn)) $PDOconn = newPDOconn();
+
+//Get all from the match table where both have said hi
+$sql = "SELECT * FROM mach WHERE ((userID_a = :userID_a AND hi_a='1' AND hi_b='1') OR (userID_b = :userID_b AND hi_a='1' AND hi_b='1'))";
+$stmtA = $PDOconn->prepare($sql);
+$paramsA[':userID_a'] = $_SESSION['userID'];
+$paramsA[':userID_b'] = $_SESSION['userID'];
+$stmtA->execute($paramsA);
+
+$friends = array();
+while($row = $stmtA->fetch())
+{
+	$matchID = $row['objectID'];
+	$Match = new Match($matchID);
+	$friendID = $Match->getNotUserID($_SESSION['userID']);
+	
+	$Friend = new User($friendID);
+	$friends[count($friends)] = $Friend;
+}
+
+//$friends is now an array of User objects
+if(true)
+{
+	echo "////// START OUTPUT FROM PHP ///////<br>";
+	echo "Number of friends: ".count($friends)."<br>";
+
+		for($i = 0; $i < count($friends); $i++)
+		{
+			//One friend
+			$Friend = $friends[$i];
+		
+			//Display their name
+			echo "Friend #".($i+1)." is <a href='http://gocollegedays.com/user/".$Friend->ID."'>"
+				.$Friend->row['fName']." ".$Friend->row['lName']."</a><br>";
+		}
+		
+	echo "<br>////// END OUTPUT FROM PHP //////<br>";
+}
+
+//DO THE SAME BELOW BUT echo HTML FOR EACH FRIEND
+?>
 <!DOCTYPE html>
 <html>
   <link rel="stylesheet" type="text/css" href="/css/friends/friends.css">
+    
   <body>
+  <? require_once('/var/www/html/src/html/header.html');?>
+
     <div class="title">
-       <h1>Friends</h1>
+      <h1>Friends (<? echo count($friends); ?>)</h1>
     </div>
 
     <div class="row">
-      <div class="friend_left">
-         <img src="http://purrfectcatnames.com/wp-content/uploads/2013/11/Gray-Cat-MorgueFile-Nov16th-2013.jpg" height="100" width="100">
+      <div class="col-md-4">
+         <img src="http://gocollegedays.com/src/html/friends/pic1.jpg" height="100" width="100">
          <p><a href="#">Chris</a></p>
       </div>
-      <div class="friend_right">
-         <img src="http://purrfectcatnames.com/wp-content/uploads/2013/11/Gray-Cat-MorgueFile-Nov16th-2013.jpg" height="100" width="100">
+      <div class="col-md-4">
+         <img src="http://gocollegedays.com/src/html/friends/pic2.jpg" height="100" width="100">
          <p><a href="#">Jonathan</a></p>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="friend_left">
-         <img src="http://purrfectcatnames.com/wp-content/uploads/2013/11/Gray-Cat-MorgueFile-Nov16th-2013.jpg" height="100" width="100">
+      <div class="col-md-4">
+         <img src="http://gocollegedays.com/src/html/friends/pic3.jpg" height="100" width="100">
          <p><a href="#">Kelly</a></p>
       </div>
     </div>
- 
-  <body>
+	<? require_once('/var/www/html/src/html/footer.html');?>
+
+
+  </body>
+
 
 </html>
