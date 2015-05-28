@@ -5,34 +5,40 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
-    <!-- Optional theme -->
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-
-    <link rel="stylesheet" type="text/css" href="/css/basic.css">
-	<link rel="stylesheet" type="text/css" href="/css/blank.css">
-
-	<link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
-	<title><? echo $title; ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!-- jquery -->
 	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
 	
+    <!-- Optional theme -->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+	-->
+	
 	<!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	
+	
+	<link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
 
+    <link rel="stylesheet" type="text/css" href="/css/basic.css">
+	<link rel="stylesheet" type="text/css" href="/css/blank.css">
+
+	<title><? echo $title; ?></title>
 	<!-- js variables -->
 	<script>
 		var domain = '<? echo $domain ?>';
 	</script>
   </head>
-  <body>
+
+	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+</head>
+<body>
 
 	<div id="mainContainer" class="ninesixty_container">
 	  <? if($content != '') require_once($content); ?>
@@ -42,4 +48,7 @@
 	</div>
 
   </body>
+
+</body>
+	<script src='/src/js/logout.js'></script>
 </html>
