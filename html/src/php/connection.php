@@ -19,7 +19,14 @@ function newPDOconn($readonly = false)
 	$dsn = 'mysql:dbname='.$DBName.';host='.$DBServer;
 
 	//Make a connection
-	$PDOconn = new PDO($dsn, $DBUser, $DBPass);
+	try
+	{
+		$PDOconn = new PDO($dsn, $DBUser, $DBPass);
+	}
+	catch(Exception $e)
+	{
+		return NULL;
+	}	
 	
 	//Check prepared statements for correct parameters
 	$PDOconn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);

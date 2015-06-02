@@ -2,24 +2,32 @@
 <html>
   <link rel="stylesheet" type="text/css" href="/css/settings/settings.css">
   <head>
+    <script src="/js/settings.js"></script>
     <h1>Settings</h1>
   </head>
   
   <body>
+    
     <div class="setting">
-	<h4><a href"#" class = "btn btn-default custom">Privacy</a></h4>
+	<h4 onclick="privacy_alert_off()"><a class = "btn btn-default custom" >Privacy</a></h4>
     </div>
     <div class="setting">
-       <h4><a href"#" class = "btn btn-default custom">Email Address</a></h4>
+       <h4><a href = "<? echo $domain; ?>/settings/email" class = "btn btn-default custom">Email Address</a></h4>
     </div>
     <div class="setting">
-       <h4><a href"#" class = "btn btn-default custom">Username</a></h4>
+       <h4><a href = "<? echo $domain; ?>/settings/name" class = "btn btn-default custom">Edit Name</a></h4>
     </div>
     <div class="setting">
-       <h4><a href"#" class = "btn btn-default custom">Disable Account</a></h4>
+       <h4><a href= "<? echo $domain ?>/settings/account" class = "btn btn-default custom">Disable Account</a></h4>
     </div>
 
       <? require_once('/var/www/html/src/html/footer.html');?>
     
   </body>
+
+    <script>
+    function privacy_alert_off () {
+      alert("You will no longer be matched!");
+    }
+    </script>
 </html>

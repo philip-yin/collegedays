@@ -12,6 +12,7 @@ function tryLogout()
 	success: function(result)
 	{
 		var response = JSON.parse(result);
+		//alert(result);
 		if(response['meta']['status'] == 1)
 		{
 			//Match found, refresh page

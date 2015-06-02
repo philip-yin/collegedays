@@ -1,6 +1,6 @@
-<?
-//note: this doesn't consider duplicate matches
-//this will be moved later
+<!DOCTYPE html>
+<html>
+  <?
 require_once('/var/www/html/src/php/setup.php');
 require_once('/var/www/html/api/match/obj/Match.php');
 
@@ -26,53 +26,41 @@ while($row = $stmtA->fetch())
 }
 
 //$friends is now an array of User objects
+?>
+  <link rel="stylesheet" type="text/css" href="/css/friends/friends.css">
+
+  <body>
+    <? require_once('/var/www/html/src/html/header.html');?>
+
+    <div class="title">
+      <h1>Friends <? echo "(".count($friends).")" ;?></h1>
+    </div>
+
+<?
+//note: this doesn't consider duplicate matches
+//this will be moved later
 if(true)
 {
-	echo "////// START OUTPUT FROM PHP ///////<br>";
-	echo "Number of friends: ".count($friends)."<br>";
-
+        echo "<div class='row'>";
 		for($i = 0; $i < count($friends); $i++)
 		{
 			//One friend
 			$Friend = $friends[$i];
-		
+		    
+			$friend_endpoint = 'chat';
+			
 			//Display their name
-			echo "Friend #".($i+1)." is <a href='http://gocollegedays.com/user/".$Friend->ID."'>"
-				.$Friend->row['fName']." ".$Friend->row['lName']."</a><br>";
-		}
-		
-	echo "<br>////// END OUTPUT FROM PHP //////<br>";
+			echo "<div class='col-md-4'><img src='http://gocollegedays.com/src/html/friends/pic1.jpg' height='100' width='100'><p>
+					<a href='http://gocollegedays.com/".$friend_endpoint."/".$Friend->ID."'>".$Friend->row['fName']." ".$Friend->row['lName']."</a>
+				  </p></div>";
+               }
+        echo "</div>";
 }
 
-//DO THE SAME BELOW BUT echo HTML FOR EACH FRIEND
 ?>
-<!DOCTYPE html>
-<html>
-  <link rel="stylesheet" type="text/css" href="/css/friends/friends.css">
-    
-  <body>
-  <? require_once('/var/www/html/src/html/header.html');?>
-
-    <div class="title">
-      <h1>Friends (<? echo count($friends); ?>)</h1>
-    </div>
-
-    <div class="row">
-      <div class="col-md-4">
-         <img src="http://gocollegedays.com/src/html/friends/pic1.jpg" height="100" width="100">
-         <p><a href="#">Chris</a></p>
-      </div>
-      <div class="col-md-4">
-         <img src="http://gocollegedays.com/src/html/friends/pic2.jpg" height="100" width="100">
-         <p><a href="#">Jonathan</a></p>
-      </div>
-
-      <div class="col-md-4">
-         <img src="http://gocollegedays.com/src/html/friends/pic3.jpg" height="100" width="100">
-         <p><a href="#">Kelly</a></p>
-      </div>
-    </div>
-	<? require_once('/var/www/html/src/html/footer.html');?>
+      
+  
+  <? require_once('/var/www/html/src/html/footer.html');?>
 
 
   </body>

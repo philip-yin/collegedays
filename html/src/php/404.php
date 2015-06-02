@@ -8,9 +8,9 @@ $URL = $_SERVER["REQUEST_URI"];
 if($URL[0] == "/")
 	$URL = substr($URL, 1);
 
-//Search for the restaurant
-$searchString = "";
-$view = "";
+//gocollegedays.com/chat/user_ID
+//Get all
+$blocks = array();
 
 $i = 0;
 $sCount = 0;
@@ -20,46 +20,82 @@ while($i < strlen($URL))
 	$sCount++;
   else
   {
-	  if($sCount == 0)
-		$searchString .= $URL[$i];
-	  else if($sCount == 1)
-		$view .= $URL[$i];
+	  $blocks[$sCount] .= $URL[$i];
   }
   
   $i++;
 }
 
 //Format search string to rtag
-$type = str_replace('-', '', $searchString);
-$type = str_replace('_', '', $type);
+for($i = 0; $i < count($blocks); $i++)
+{
+	$blocks[$i] = str_replace('-', '', $blocks[$i]);
+	
+	if(!(preg_match('/^[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*$/', $blocks[$i])))
+	{
+		pageNotFound(); return;
+	}
+}
 
-//Search for the rTag
+// chat, user_ID
+// user, user_ID
+
+//OK, continue
 include_once('/var/www/html/src/php/setup.php');
 $PDOconn = newPDOconn();
 
-if($type == 'user')
+if(count($blocks) == 2)
 {
-	//DISPLAY THE RESTAURANT
-	$userID = $view;
-	$User = new User($userID);
-	
-	$viewerID = $_SESSION['userID'];
-	$Viewer = new User($viewerID);
-	
-	if($User->exists)
+	if($blocks[0] == 'user')
 	{
-		//Show profile
-		$title = $User->row['fName']." ".$User->row['lName'];
-		$content = '/var/www/html/src/html/profile/profile.html';
+		//DISPLAY THE USER PROFILE
+		$userID = $blocks[1];
+		$User = new User($userID);
+		
+		$viewerID = $_SESSION['userID'];
+		$Viewer = new User($viewerID);
+		
+		if($User->exists)
+		{
+			//Show profile
+			$title = $User->row['fName']." ".$User->row['lName'];
+			$content = '/var/www/html/src/html/profile/profile.html';
+			require_once('/var/www/html/src/html/blank.html');
+			return true;
+		}
+		else
+			{pageNotFound(); return;}
+	}
+	else if($blocks[0] == 'chat')
+	{
+		//DISPLAY THE CHAT
+		require_once('/var/www/html/api/conversation/obj/Conversation.php');
+		$chattingWithUserID = $blocks[1];
+		$Friend = new User($chattingWithUserID);
+		
+		if(!$Friend->exists)
+			{ pageNotFound(); return; }
+		
+		//Friend exists, get their conversation
+		$User =  new User($_SESSION['userID']);
+		$Conversation = $Friend->getConversationWith($User->ID, true);
+
+		if(!$Conversation->exists)
+			{ pageNotFound(); return; }
+			
+		//Show their conversation
+		$title = $User->row['fName']." ".$User->row['lName']." - Chat";
+		$content = '/var/www/html/src/html/chat/conversation.html';
 		require_once('/var/www/html/src/html/blank.html');
 		return true;
 	}
 	else
-		pageNotFound();
+		{pageNotFound(); return;}
 }
 else
-	pageNotFound();
-	
+	{pageNotFound(); return;}
+
+
 return;
 
 function pageNotFound()

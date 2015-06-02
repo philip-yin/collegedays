@@ -7,6 +7,21 @@
 
 <? require_once('/var/www/html/src/html/header.html');?>
 
+<?
+		//Are matches?
+		$isA = $Match->isA($Viewer->ID);
+		$isB = !$isA;
+
+		$saidHiA = $Match->row['hi_a'];
+		$saidHiB = $Match->row['hi_b'];
+
+		$match_endpoint = 'user';
+		if(($saidHiA + $saidHiB) == 2)
+		{
+			//Both have said hi, link to chat
+			$match_endpoint = 'chat';
+		}
+?>
 <div class="row">
   <div class="col-sm-6 col-md-4"></div>
   <div class="col-sm-6 col-md-4">
@@ -15,7 +30,7 @@
       <img id="matchimage" class="img-circle">
       <div class="caption">
         <h3>
-      	  <a class="lightLink" href="<? echo $domain.'/user/'.$Someone->ID; ?>">
+      	  <a class="lightLink" href="<? echo $domain.'/'.$match_endpoint.'/'.$Someone->ID; ?>">
 		    <? echo $Someone->row['fName']." ".$Someone->row['lName']; ?>
 	      </a>
         </h3>
@@ -24,12 +39,6 @@
         </p>
 
 <?
-
-		$isA = $Match->isA($Viewer->ID);
-		$isB = !$isA;
-
-		$saidHiA = $Match->row['hi_a'];
-		$saidHiB = $Match->row['hi_b'];
 
 		if(($saidHiA == 0 && $isA) || ($saidHiB == 0 && $isB))
 		{

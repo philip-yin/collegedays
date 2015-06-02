@@ -11,8 +11,7 @@
 	*/
 	include_once('/var/www/html/src/php/setup.php');
 	include_once('/var/www/html/api/user/obj/User.php');
-	include_once('/var/www/html/api/match/obj/Match.php');
-	include_once('/var/www/html/src/php/CDPriorityQueue.php');
+
 
 	//Create the response
 	$response = array();
@@ -21,7 +20,7 @@
 		//Create a meta object
 		$meta = array();
 		$meta['time'] = time();
-		$meta['type'] = 'match/retrieve';
+		$meta['type'] = '/account/email/change/';
 		$meta['status'] = 0;
 
 	//Add the meta
@@ -40,21 +39,14 @@
 	//Get the current user
 	$User = new User($_SESSION['userID']);
 	
-	$MatchID = $User->getCurrentMatchID();
-	
-	if($MatchID == '')
-	{
-		$response['data']['reason'] = "The user is currently unmatched";
-		sendResponse(400, json_encode($response));
-		return false;
-	}
-	
-	//Create a match
-	$Match = new Match($MatchID);
-	$hiSuccess = $Match->sayHi($User->ID);
+	$password = $_POST['password'];
+	$fName =$_POST['firstName'];
+	$lName = $_POST['lastName'];
 
+	$change_name_response = $User->edit_name($password, $fName, $lName);
+	
 	//Set the status to 1 (success)
-	$response['meta']['status'] = (int)$hiSuccess;
+	$response['meta']['status'] = (int)$change_name_response[0]['status'];
 
 	//Send the response
 	sendResponse(200, json_encode($response));

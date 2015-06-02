@@ -147,6 +147,7 @@ class User extends CDObject
 		if($successI)
 		{
 			$this->ID = $uniqueID;
+			$this->exists = true;
 			$this->refresh();
 			
 			$sql = "UPDATE user SET lastRow=:lastRow WHERE objectID=:objectID";
@@ -224,6 +225,84 @@ class User extends CDObject
 		$paramsA[':objectID'] = $this->ID;
 		$stmtA->execute($paramsA);
 	}
+	public function change_email($password, $original_email, $new_email, $confirm_new_email)
+	{
+		$response[0]['status'] = 0;
+		$response[1]['reason'] = "";
+		
+		//Does the user use this password?
+		if(!$this->usesPassword($password))
+		{
+			$response[1]['reason'] = "Incorrect password."; 
+			return $response;
+		}
+		if($this->row['email']!= $original_email )
+		{
+			$response[1]['reason'] = "Incorrect original email"; 
+			return $response;
+		}
+		if($confirm_new_email != $new_email)
+		{
+			$response[1]['reason'] = "The email you want to change does not match."; 
+			return $response;
+		}
+		$sql = "UPDATE user SET email=:confirm_new_email WHERE objectID=:objectID";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':confirm_new_email'] = $confirm_new_email;
+		$paramsA[':objectID'] = $this->ID;
+
+		$stmtA->execute($paramsA);
+		
+		$response[0]['status'] = 1;
+		return $response;
+
+
+	}
+
+	public function edit_name($password, $fName, $lName)
+	{
+
+		$response[0]['status'] = 0;
+		$response[1]['reason'] = "";
+		
+		//Does the user use this password?
+		if(!$this->usesPassword($password))
+		{
+			$response[1]['reason'] = "Incorrect password."; 
+			return $response;
+		}
+
+		$sql = "UPDATE user SET fname=:fName, lName=:lName WHERE objectID=:objectID";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':fName'] = $fName;
+		$paramsA[':lName'] = $lName;
+		$paramsA[':objectID'] = $this->ID;
+		$stmtA->execute($paramsA);
+		
+		$response[0]['status'] = 1;
+		return $response;
+	}
+
+	public function disableAccount($password)
+	{
+		$response[0]['status'] = 0;
+		$response[1]['reason'] = "";
+		
+		//Does the user use this password?
+		if(!$this->usesPassword($password))
+		{
+			$response[1]['reason'] = "Incorrect password."; 
+			return $response;
+		}
+		
+		$sql = "UPDATE user SET disabled='1' WHERE objectID=:objectID";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':objectID'] = $this->ID;
+		$stmtA->execute($paramsA);
+		
+		$response[0]['status'] = 1;
+		return $response;
+	}
 	
 	//Returns true or false if the user uses the password
 	public function usesPassword($password = '')
@@ -248,6 +327,34 @@ class User extends CDObject
 		return true;
 	}
 	
+	//Convesations
+	public function getConversationWith($userID, $makeNew = false)
+	{
+		if(!$this->exists) return false;
+		require_once('/var/www/html/api/conversation/obj/Conversation.php');
+		$Conversation = new Conversation(NULL, $this->PDOconn);
+		$Conversation->findConversation($userID, $this->ID);
+		
+		if(!$Conversation->exists)
+		{
+			//No conversation, can we make one?
+			$canConverse = true;
+			
+			//Is the requested chat the current match for $this?
+			require_once('/var/www/html/api/match/obj/Match.php');
+			$Match = new Match($this->getCurrentMatchID());
+			if($Match->getNotUserID($this->ID) != $userID)
+				$canConverse = false;
+			
+			if($canConverse && $makeNew)
+			{
+				//Create the conversation
+				$Conversation->create($this->ID, $userID);
+			}
+		}
+		
+		return $Conversation;
+	}
 }
 
 ?>
