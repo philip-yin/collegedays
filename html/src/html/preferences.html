@@ -1,0 +1,38 @@
+<?
+	$looking = $User->row['looking'];
+	$guys = 0; if($looking == 'm' || $looking == 'b') $guys = 1;
+	$girls = 0; if($looking == 'f' || $looking == 'b') $girls = 1;
+	$matching = $User->row['matching'];
+?>
+<script>
+	var guys = parseInt('<? if(!$guys) echo 0; else echo 1; ?>');
+	var girls = parseInt('<? if(!$girls) echo 0; else echo 1; ?>');
+	var matching = parseInt('<? if(!$matching) echo 0; else echo 1; ?>');
+	var verified = <? echo $User->isVerified(); ?>;
+</script>
+<link rel="stylesheet" type="text/css" href="/css/preferences.css">
+    <div id="preferences_block">
+
+		<div id="preferences_title">Who do you want to meet?</div>
+	
+		<div id="preferences_ggcontainer">
+			<div class="preferences_select" id="preferences_guys">GUYS<div class="gg_check" id="check_guys"></div></div>
+			<div class="preferences_select" id="preferences_girls">GIRLS<div class="gg_check" id="check_girls"></div></div>
+		</div>
+	
+		<div id="preferences_button_container">
+			<div class="button" id="match_button">
+			<?
+				if($matching && ($looking != ' ' || $looking != '')) echo "Stop Matching";
+				else echo "Start Matching!";
+			?>
+			</div>
+		</div>
+	
+		<div id="preferences_message"></div>
+	
+    </div>
+
+<? require_once('/var/www/html/src/html/footer.html');?>
+
+<script src="/src/js/preferences.js"></script>

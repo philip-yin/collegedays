@@ -1,25 +1,30 @@
-
+<?
+	$maxLength = 120;
+	
+	$friendID = $Conversation->getNotUserID($User->ID);
+	$Friend = new User($friendID);
+?>
+<script>
+	var userID = '<? echo $User->ID; ?>';
+	var maxLength = <? echo $maxLength; ?>;
+	var conversationID = '<? echo $Conversation->ID; ?>';
+	var newestTime = 0;
+</script>
 <link rel="stylesheet" type="text/css" href="/css/chat/conversation.css">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <div id="conversation_container">
-	
-	<div class="message_container">
-		<div class="message_body message_left">
-			Hey buddy, wanna hear a joke?
-		</div>
-	</div><!-- message_contaienr-->
-	
-	<div class="message_container">
-		<div class="message_body message_right">
-			nah
-		</div>
-	</div><!-- message_contaienr-->
-
-	<div class="message_container">
-		<div class="message_body message_left">
-			ok
-		</div>
-	</div><!-- message_contaienr-->
-	
-	
+	<div id="conversation_min_top_padding"></div>
+	<div id="conversation_messages"></div>
+	<div id="conversation_min_bottom_padding"></div>
 </div>
+
+	<div id="conversation_title"><? echo $Friend->row['fName']." ".$Friend->row['lName']; ?></div>
+
+	<div id="send_container">
+		<div id="send_body">
+			<textarea id="send_textarea" placeholder="Type message..."></textarea>
+		</div>
+		<div id="send_button">SEND</div>
+		<div id="send_char"></div>
+	</div><!-- send_container-->
+<script src='/src/js/chat/chat.js'></script>

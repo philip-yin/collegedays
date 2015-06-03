@@ -73,7 +73,7 @@ form
 	height: 15px;
 }
 
-.submitButton, #loginbutton, #signupbutton
+.button, .submitButton, #loginbutton, #signupbutton
 {
 	width: 260px;
 	height: 60px;

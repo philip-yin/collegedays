@@ -4,17 +4,41 @@
 
     <div id="user_block">
 
-		<div id="profile_picture"></div><!-- profile-picture -->
+	<?
+		$imageStyle = 'background: white url('.$User->getImageURL().') no-repeat center center; ';
+		$imageStyle .= 'background-size: 160px;';
+	?>
+		
+		<div id="profile_picture" style="<? echo $imageStyle; ?>">
+					<!-- <form method="post" action="http://gocollegedays.com/api/upload/image/" enctype="multipart/form-data">-->
+					<? if($Viewer->ID == $User->ID) echo "<input type='file' name='file' id='file_input'/>"; ?>
+					<!-- </form> -->
+		</div><!-- profile-picture -->
 		
         <h3 id="profile_name">
 			<? echo $User->row['fName']." ".$User->row['lName']; ?>
 		</h3>
 
-		<div id="profile_description">
-			No description
-		</div>
+<textarea id="profile_description" form = "edit" style="resize: none;" <? if($User->ID != $Viewer->ID) echo 'readonly'; ?>>
+<? 
+				if($User->row['description'] == '' )
+					echo $User->row['fName']." has no description";
+				else
+					echo $User->row['description'];
+?>
+</textarea>
+
+		<?
+			if($User->ID == $Viewer->ID){
+		?>
+			<form id="edit">
+				<input id = "editButton" type="submit" value= "Update Description">
+			</form>
+		<? 
+			} 
+		?>	
 	
     </div>
 	
 <? require_once('/var/www/html/src/html/footer.html');?>
-
+<script src="/src/js/profile.js"></script>

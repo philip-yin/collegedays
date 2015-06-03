@@ -1,3 +1,12 @@
+#profile_description
+{
+	width: 100%;
+	background: none;
+	border: 0px;
+	color: #3d3d3d;
+	text-alignment: justify;
+}
+
 .button
 {
 	width: 110px;

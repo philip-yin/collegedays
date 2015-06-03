@@ -103,8 +103,8 @@
 				{
 					if($debug) echo "Creating a match with ".$nextUser->row['fName']." (".$nextRow.") <br>";
 					$newMatch = new Match('', $PDOconn);
-					$newMatch->create($User->ID, $nextUser->ID);
-					// if($debug) echo "Match created...";
+					$newMatchResult = $newMatch->create($User->ID, $nextUser->ID);
+					if($debug) echo "Match creation result: ".$newMatchResult."<br>";
 					
 					$User->setMatched(true);
 					$User->setLastRow($nextRow);
@@ -154,7 +154,6 @@
 		$User->setLastRow($nextRow);
 		$newUser->setMatched(true);
 					
-
 		$Match = $newMatch;
     }
 

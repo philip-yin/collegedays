@@ -60,7 +60,106 @@ class User extends CDObject
 				return;
 			}
 	}
-
+	
+	public function isVerified()
+	{
+		$email = $this->row['email'];
+		$sql = "SELECT verified FROM verify WHERE email=:email AND userID=:userID";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':email'] = $email;
+		$paramsA[':userID'] = $this->ID;
+		$stmtA->execute($paramsA);
+		
+		if($stmtA->rowCount() == 0) return 0;
+		
+		$row = $stmtA->fetch();
+		return $row['verified'];
+	}
+	
+	public function verify($key)
+	{
+		if(!$this->exists) return false;
+		if($this->isVerified()) return false;
+		
+		$sql = "UPDATE verify SET verified='1' WHERE email=:email AND userID=:userID AND verification_key=:key";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':email'] = $this->row['email'];
+		$paramsA[':userID'] = $this->ID;
+		$paramsA[':key'] = $key;
+		return $stmtA->execute($paramsA);
+	}
+	
+	public function change_description($description)
+	{
+		$response[0]['status'] = 0;
+		//Check description size
+		$minLength = CDConsts::getConst('MIN_DESCRIPTION', 'intValue', $this->PDOconn);
+		$maxLength = CDConsts::getConst('MAX_DESCRIPTION', 'intValue', $this->PDOconn);
+		$description_length = strlen($description);
+		
+		if($description_length < $minLength || $desciption_length > $maxLength)
+		{
+			$response[1]['reason'] = "The description size is incorrect.";
+			return $response;
+		}
+		
+		$description = strip_tags($description);
+		
+		$sql = "UPDATE user SET description=:description WHERE objectID=:objectID";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':description'] = $description;
+		$paramsA[':objectID'] = $this->ID;
+		$stmtA->execute($paramsA);
+		
+		$response[0]['status'] = 1;
+		return $response;
+	}
+	
+	public function getImageURL()
+	{
+		return $this->row['imageURL'];
+	}
+	
+	public function setMatching($matching)
+	{
+		if(!$this->exists) return false;
+		
+		if(!$this->isVerified()) return false;
+		
+		$sql = "UPDATE user SET matching=:matching WHERE objectID=:objectID";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':matching'] = $matching;
+		$paramsA[':objectID'] = $this->ID;
+		$stmtA->execute($paramsA);
+		$this->refresh();
+		
+		if($matching == 0)
+		{
+			$this->setLooking(' ');
+		}
+		
+		return true;
+	}
+	
+	public function setLooking($string)
+	{
+		$valid = false;
+		if($string == ' ' ||
+		   $string == 'm' ||
+		   $string == 'f' ||
+		   $string == 'b')
+		   $valid = true;
+		   
+		if(!$valid) return false;
+		 
+		$sql = "UPDATE user SET looking=:looking WHERE objectID=:objectID";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':looking'] = $string;
+		$paramsA[':objectID'] = $this->ID;
+		$stmtA->execute($paramsA);
+		$this->refresh();
+	}
+	
 	//Creates a new user, returns true if successful
 	public function create($fName, $lName, $email, $password)
 	{	
@@ -157,8 +256,78 @@ class User extends CDObject
 			$stmtN->execute($paramsN);
 		}
 		
+		//Email verification link to user
+		$this->verifyEmail();
+		
 		$response[0]['status'] = 1;
 		return $response;
+	}
+	
+	public function verifyEmail()
+	{
+		$userEmail = $this->row['email'];
+
+		//Send verification link
+		$key = $this->getVerificationKey($userEmail);
+		
+		//Make link
+		$verificationLink = "http://gocollegedays.com/?key=".$key."&user=".$this->ID;
+		
+		//The source
+		$sourceAddress = "CollegeDays <hello@gocollegedays.com>";
+		
+		//The subject header
+		$subjectHeader = "Hello, ".$this->row['fName']."!";
+		
+		//Body text
+		$bodyText = 'Follow this link to verfy your '.$this->row['school'].' email: <a href="'.$verificationLink.'">Click to verify your email</a>';
+		
+		//Body HTML
+		$titleText = 'Please verify your '.$this->row['school'].' email!';
+		$bodyHTML = 
+		'<p>
+		<a href="'.$verificationLink.'">Follow this link to verify your email</a>
+		</p>
+		';
+		
+		//Send the email
+		require_once('/var/www/html/src/php/mail/mail.php');
+		sendEmail($sourceAddress, $userEmail, $subjectHeader, $titleText, $bodyText, $bodyHTML, $this->PDOconn);
+	}
+	
+	public function getVerificationKey($email)
+	{
+		$sql = "SELECT verification_key FROM verify WHERE email=:email";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':email'] = $email;
+		$stmtA->execute($paramsA);
+		
+		if($stmtA->rowCount() > 0)
+		{
+			$row = $stmtA->fetch();
+			$key = $row['verification_key'];
+		}	
+		else
+		{
+			do
+			{
+				$key = CDTools::randString(32);
+				$sql = "SELECT row FROM verify WHERE verification_key=:verification_key";
+				$stmtB = $this->PDOconn->prepare($sql);
+				$paramsB[':verification_key'] = $key;
+				$stmtB->execute($paramsB);
+			}
+			while($stmtB->rowCount() > 0);
+			
+			$sql = "INSERT INTO verify (verification_key, email, userID) VALUES (:verification_key, :email, :userID)";
+			$stmtC = $this->PDOconn->prepare($sql);
+			$paramsC[':verification_key'] = $key;
+			$paramsC[':email'] = $email;
+			$paramsC[':userID'] = $this->ID;
+			$stmtC->execute($paramsC);
+		}
+		
+		return $key;
 	}
 	
 	//Returns the matchID of the current user's match
@@ -179,7 +348,9 @@ class User extends CDObject
 		$maxTime = strtotime("tomorrow", $minTime) - 1;
 				
 		//Search for a match that involves the user and is within the max and min timestamps (today)
-		$sql = "SELECT objectID FROM mach WHERE (userID_a=:userID_1 OR userID_b=:userID_2) AND 
+		$table = "mach";
+		if($this->istest) $table .= "_test";
+		$sql = "SELECT objectID FROM $table WHERE (userID_a=:userID_1 OR userID_b=:userID_2) AND 
 				(creationTime >= :minTime AND creationTime <= :maxTime) LIMIT 1";
 				
 		$stmtA = $this->PDOconn->prepare($sql);
@@ -210,7 +381,9 @@ class User extends CDObject
 	
 	public function setMatched($matched)
 	{
-		$sql = "UPDATE user SET currentlyMatched=:matched WHERE objectID=:objectID";
+		$table = $this->getTableName();
+		
+		$sql = "UPDATE $table SET currentlyMatched=:matched WHERE objectID=:objectID";
 		$stmtA = $this->PDOconn->prepare($sql);
 		$paramsA[':matched'] = $matched;
 		$paramsA[':objectID'] = $this->ID;
@@ -219,7 +392,9 @@ class User extends CDObject
 	
 	public function setLastRow($lastChecked)
 	{
-		$sql = "UPDATE user SET lastRow=:lastRow WHERE objectID=:objectID";
+		$table = $this->getTableName();
+		
+		$sql = "UPDATE $table SET lastRow=:lastRow WHERE objectID=:objectID";
 		$stmtA = $this->PDOconn->prepare($sql);
 		$paramsA[':lastRow'] = $lastChecked;
 		$paramsA[':objectID'] = $this->ID;
@@ -343,6 +518,7 @@ class User extends CDObject
 			//Is the requested chat the current match for $this?
 			require_once('/var/www/html/api/match/obj/Match.php');
 			$Match = new Match($this->getCurrentMatchID());
+			
 			if($Match->getNotUserID($this->ID) != $userID)
 				$canConverse = false;
 			

@@ -56,7 +56,9 @@ class Match extends CDObject
 		$isA = $this->isA($userID);
 		$isB = !$isA;
 		
-		$sql = "UPDATE mach SET hi_a='1' WHERE objectID=:machID";
+		$table = $this->getTableName();
+		
+		$sql = "UPDATE $table SET hi_a='1' WHERE objectID=:machID";
 		if($isB) $sql = "UPDATE mach SET hi_b='1' WHERE objectID=:machID";
 		$stmtA = $this->PDOconn->prepare($sql);
 		$paramsA[':machID'] = $this->ID;
@@ -65,7 +67,9 @@ class Match extends CDObject
 	
 	public function isA($userID)
 	{
-		$sql = "SELECT userID_a FROM mach WHERE objectID=:matchID";
+		$table = $this->getTableName();
+		
+		$sql = "SELECT userID_a FROM $table WHERE objectID=:matchID";
 		$stmtA = $this->PDOconn->prepare($sql);
 		$paramsA[':matchID'] = $this->ID;
 		$stmtA->execute($paramsA);
@@ -82,7 +86,9 @@ class Match extends CDObject
 	
 	public function isB($userID)
 	{
-		$sql = "SELECT userID_b FROM mach WHERE objectID=:matchID";
+		$table = $this->getTableName();
+		
+		$sql = "SELECT userID_b FROM $table WHERE objectID=:matchID";
 		$stmtA = $this->PDOconn->prepare($sql);
 		$paramsA[':matchID'] = $this->ID;
 		$stmtA->execute($paramsA);
@@ -126,9 +132,9 @@ class Match extends CDObject
 
 	public function countMatches($userID_a , $userID_b)
 	{
+		$table = $this->getTableName();
 
-
-		$sql = "SELECT COUNT(*) FROM mach WHERE 
+		$sql = "SELECT COUNT(*) FROM $table WHERE 
 			(userID_a =:userID_a1 AND userID_b =:userID_b1) OR (userID_a =:userID_b2 AND userID_b =:userID_a2)";
 		$stmtA = $this->PDOconn->prepare($sql);
 		$paramsA[':userID_a1'] = $userID_a;
@@ -156,8 +162,8 @@ class Match extends CDObject
 	public function create($userID_a = '', $userID_b = '')
 	{
 		//Ensure this match doesn't exist
-		if($this->exists)
-			return false;
+		if($this->exists)  {
+			return false;}
 		
 		//Ensure the users exist
 		$User_a = new User($userID_a);
@@ -170,8 +176,9 @@ class Match extends CDObject
 		
 		//Insert match into table
 		//Create user
+		$table = $this->getTableName();
 		$uniqueID = $this->generateUniqueID();
-		$sql = "INSERT INTO mach (objectID, userID_a, userID_b, creationTime) VALUES
+		$sql = "INSERT INTO $table (objectID, userID_a, userID_b, creationTime) VALUES
 								 (:objectID, :userID_a, :userID_b, :creationTime)";
 		$stmtI = $this->PDOconn->prepare($sql);		
 		$paramsI[':objectID'] = $uniqueID;

@@ -15,14 +15,20 @@ $paramsA[':userID_b'] = $_SESSION['userID'];
 $stmtA->execute($paramsA);
 
 $friends = array();
+$addedFriendIDs = array();
+
 while($row = $stmtA->fetch())
 {
 	$matchID = $row['objectID'];
 	$Match = new Match($matchID);
 	$friendID = $Match->getNotUserID($_SESSION['userID']);
 	
-	$Friend = new User($friendID);
-	$friends[count($friends)] = $Friend;
+	if(!in_array($friendID, $addedFriendIDs))
+	{
+		$addedFriendIDs[count($addedFriendsIDs)] = $friendID;
+		$Friend = new User($friendID);
+		$friends[count($friends)] = $Friend;
+	}
 }
 
 //$friends is now an array of User objects
@@ -50,7 +56,7 @@ if(true)
 			$friend_endpoint = 'chat';
 			
 			//Display their name
-			echo "<div class='col-md-4'><img src='http://gocollegedays.com/src/html/friends/pic1.jpg' height='100' width='100'><p>
+			echo "<div class='col-md-4'><img src='".$Friend->getImageURL()."' height='100' width='100'><p>
 					<a href='http://gocollegedays.com/".$friend_endpoint."/".$Friend->ID."'>".$Friend->row['fName']." ".$Friend->row['lName']."</a>
 				  </p></div>";
                }

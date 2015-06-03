@@ -74,7 +74,7 @@ if(count($blocks) == 2)
 		$Friend = new User($chattingWithUserID);
 		
 		if(!$Friend->exists)
-			{ pageNotFound(); return; }
+			{ echo pageNotFound(); return; }
 		
 		//Friend exists, get their conversation
 		$User =  new User($_SESSION['userID']);

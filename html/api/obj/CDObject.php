@@ -9,6 +9,7 @@ class CDObject
 	public $tablename;
 	public $row;
 	public $PDOconn;
+	public $test;
 	
 	function CDObject($tablename = '', $PDOconn = NULL)
 	{
@@ -61,6 +62,18 @@ class CDObject
 			unset($stmtA);
 			unset($paramsA);
 		}
+	}
+	
+	public function disconnect()
+	{
+		unset($this->PDOconn);
+	}
+	
+	public function getTableName()
+	{
+		$table = $this->tablename;
+		if($this->test) $table .= "_test";
+		return $table;
 	}
 	
 	private function isTablenameValid()
