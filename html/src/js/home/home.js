@@ -16,3 +16,9 @@ $('#hello_button').click( function()
 		}
 	}});
 });
+
+
+$('#nothanks').click( function()
+{
+	$('#user_block').animate({height: '10px'}, 250);
+});

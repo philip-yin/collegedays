@@ -4,6 +4,7 @@ include_once('/var/www/html/api/user/obj/User.php');
 
 class Match extends CDObject
 {
+
 	//Class constructor
 	function Match($identifier = NULL, $PDOconn = NULL)
 	{
@@ -162,16 +163,18 @@ class Match extends CDObject
 	public function create($userID_a = '', $userID_b = '')
 	{
 		//Ensure this match doesn't exist
-		if($this->exists)  {
-			return false;}
+		if($this->exists)  { return false;}
 		
 		//Ensure the users exist
-		$User_a = new User($userID_a);
-		$User_b = new User($userID_b);
 		
-		if(!$User_a->exists || !$User_b->exists)
-			return false;
+		if($this->istest == false)
+		{
+			$User_a = new User($userID_a);
+			$User_b = new User($userID_b);
 			
+			if(!$User_a->exists || !$User_b->exists)
+				return false;
+		}	
 		//Ensure the users are not friends
 		
 		//Insert match into table

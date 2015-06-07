@@ -9,7 +9,7 @@ class CDObject
 	public $tablename;
 	public $row;
 	public $PDOconn;
-	public $test;
+	public $istest;
 	
 	function CDObject($tablename = '', $PDOconn = NULL)
 	{
@@ -48,10 +48,11 @@ class CDObject
 		if(!$this->isTablenameValid($this->tablename))
 			return false;
 		
-		$tablename = $this->tablename;
+		$tablename = $this->getTableName();
+		
 		while(true)
 		{
-			$objectID = $this->tablename.'_'.CDTools::randString(32);
+			$objectID = $tablename.'_'.CDTools::randString(32);
 			$sql = "SELECT objectID FROM $tablename WHERE objectID=:objectID";
 			$stmtA = $this->PDOconn->prepare($sql);
 			$paramsA[':objectID'] = $objectID;
@@ -72,7 +73,8 @@ class CDObject
 	public function getTableName()
 	{
 		$table = $this->tablename;
-		if($this->test) $table .= "_test";
+		if($this->istest) $table .= "_test";
+			
 		return $table;
 	}
 	

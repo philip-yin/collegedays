@@ -29,7 +29,17 @@
 	
 	//Ensure the user is logged in
 	session_start();
-	if(!isset($_SESSION['userID']))
+	
+	$testing = false;
+	if((int)$_GET['test'] == 1 && TRUE)
+	{
+		$_SESSION['userID'] = $_GET['user'];
+		echo "<br>SESSION FOR USER: ".$_SESSION['userID']."<br>";
+		$User = new User($_SESSION['userID']);
+		$User->istest = true;
+		$testing = true;
+	}
+	else if(!isset($_SESSION['userID']))
 	{
 		//Send the response
 		$response['data']['reason'] = "The user is not logged in.";
@@ -38,7 +48,8 @@
 	}
 	
 	//Get the current user
-	$User = new User($_SESSION['userID']);
+	if(!isset($User))
+		$User = new User($_SESSION['userID']);
 	
 	//Default match ID
 	$matchID = '';
@@ -49,6 +60,14 @@
 	{
 		//No match ID provided, get the user's current match
 		$matchID = $User->getCurrentMatchID();
+		
+		if($matchID != '')
+		{
+			//Add this match to data
+			$response['data']['matchID'] = $matchID;
+			$response['meta']['status'] = 1;
+			sendResponse(200, json_encode($response)); return false;
+		}
 	}
 
 	//Make a connection
@@ -58,7 +77,10 @@
 	$Match = new Match($matchID, $PDOconn);
 	
 	//Get the rows in the table
-	$sql = "SELECT row FROM user ORDER BY row DESC LIMIT 1";
+	$tablename = "user";
+	if($testing) $tablename .= "_test";
+	
+	$sql = "SELECT row FROM ".$tablename." ORDER BY row DESC LIMIT 1";
 	$stmtA = $PDOconn->prepare($sql);
 	$stmtA->execute();
 	$row = $stmtA->fetch();
@@ -80,7 +102,6 @@
 		//making a PQ
 		$PQ = new CDPriorityQueue();
 
-
 		$stillMatching = true;
 		while($stillMatching)
 		{
@@ -92,6 +113,7 @@
 			$nextRow = 0;
 		
 			$nextUser = new User($nextRow, $PDOconn);
+			if($testing) $nextUser->istest = true;
 			$nextUser->refreshMatched();
 			
 			if($nextUser->exists)
@@ -102,15 +124,17 @@
 				if ($matchCount == 0 && $nextUser->row['currentlyMatched'] == 0 )//&& !$Match->areMatched($User->ID, $nextUser->ID))
 				{
 					if($debug) echo "Creating a match with ".$nextUser->row['fName']." (".$nextRow.") <br>";
-					$newMatch = new Match('', $PDOconn);
+					$newMatch = new Match(NULL, $PDOconn);
+					
+					if($testing) $newMatch->istest = true;
+					
 					$newMatchResult = $newMatch->create($User->ID, $nextUser->ID);
-					if($debug) echo "Match creation result: ".$newMatchResult."<br>";
+					if($debug) echo "Match creation result: ".$newMatchResult."<br> was test: ".$newMatch->istest;
 					
 					$User->setMatched(true);
 					$User->setLastRow($nextRow);
 					$nextUser->setMatched(true);
 					
-
 					$Match = $newMatch;
 					
 					$stillMatching = false;
@@ -145,10 +169,11 @@
     	$newUser = new User($matchingUserID, $PDOconn);
 		
     	if($debug) echo "Popped ".$newUser->row['fName'].", making a match...";
-		$newMatch = new Match('', $PDOconn);
-		// if($debug) echo "have new match.";
+		$newMatch = new Match(NULL, $PDOconn);
+		$newMatch->istest = true;
+		// if($debug) echo "<br>new match is test: ".$newMatch->istest;
 		$newMatch->create($User->ID, $matchingUserID);
-		// if($debug) echo "Match created...";
+		if($debug) echo "Match created... ";
 					
 		$User->setMatched(true);
 		$User->setLastRow($nextRow);

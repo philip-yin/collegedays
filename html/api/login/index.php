@@ -29,7 +29,17 @@
 	}
 
 	//Get the user
-	$User = new User($email);
+	$testing = false;
+	if((int)$_GET['test'] == 1 && TRUE)
+	{
+		//TESTING
+		$User = new User($_GET['user']);
+		$User->istest = true;
+		$testing = true;
+	}
+
+	if(!isset($User))
+		$User = new User($email);
 	
 	if(! $User->exists)
 	{
@@ -39,7 +49,7 @@
 	}
 	
 	//Correct password?
-	if(! $User->usesPassword($password))
+	if(!$testing && !$User->usesPassword($password))
 	{
 		$response['data']['reason'] = "Incorrect password or email.";
 		sendResponse(400, json_encode($response));
