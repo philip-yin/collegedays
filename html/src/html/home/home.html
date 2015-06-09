@@ -2,11 +2,13 @@
 	$Match = new Match($matchID);
 	$Someone = new User($Match->getNotUserID($User->ID));
 ?>
+<script>
+	var secondsLeft = <? echo $Match->secondsLeft(); ?>;
+</script>
 <link rel="stylesheet" type="text/css" href="/css/match/basic.css">
 <link rel="stylesheet" type="text/css" href="/css/home/home.css">
 
 <? require_once('/var/www/html/src/html/header.html');?>
-
 <?
 		//Are matches?
 		$isA = $Match->isA($Viewer->ID);
@@ -22,59 +24,66 @@
 			$match_endpoint = 'chat';
 		}
 ?>
-<div class="row">
-  <div class="col-sm-6 col-md-4"></div>
-  <div class="col-sm-6 col-md-4">
-    <div class="thumbnail" style="background:grey;">
-      <br>
-      <img id="matchimage" class="img-circle" src="<? echo $Someone->getImageURL(); ?>">
-      <div class="caption">
-        <h3>
-      	  <a class="lightLink" href="<? echo $domain.'/'.$match_endpoint.'/'.$Someone->ID; ?>">
-		    <? echo $Someone->row['fName']." ".$Someone->row['lName']; ?>
-	      </a>
-        </h3>
-        <p style="color:white;">
-      	  <? echo $Someone->row['school']; ?>
-        </p>
 
-        <textarea id="profile_description" style="resize: none;" readonly>
-		<? 
-				if($Someone->row['description'] == '' )
-					echo $Someone->row['fName']." has no description";
-				else
-					echo $Someone->row['description'];
-		?></textarea>
+  <div id="match_container">
+  	  <div id="match_banner"></div>
+	  <div id="match_show">SEE MATCH</div>
 
-<?
+    <div id="match_block">
+	
+	  <div id="match_hide"></div>
 
-		if(($saidHiA == 0 && $isA) || ($saidHiB == 0 && $isB))
-		{
+      <div id="match_content">
+		  <img id="matchimage" class="img-circle" src="<? echo $Someone->getImageURL(); ?>">
+		  <div class="caption">
+			<h3 id="match_name">
+			  <a href="<? echo $domain.'/'.$match_endpoint.'/'.$Someone->ID; ?>">
+				<? echo $Someone->row['fName']." ".$Someone->row['lName']; ?>
+			  </a>
+			</h3>
+			<p id="match_school">
+			  <? echo $Someone->row['school']; ?>
+			</p>
 
-		echo '
-			<div id="hello_button" class = "btn btn-oval btn-default">
-			 <b>HELLO!</b>
-			</div><!-- hello-->
+			<textarea id="match_description" readonly><?
+					if($Someone->row['description'] == '')
+						echo $Someone->row['fName']." has no description";
+					else
+						echo $Someone->row['description'];
+			?></textarea>
 
-			<div id="nothanks" class = "btn btn-oval btn-default" onclick='document.getElementById('hello_button').disabled;'>
-			  <a href = "#"><b>No, thanks.</b></a>
-			</div><!-- nothanks-->';
-		}
-		else if (($saidHiA + $saidHiB) == 1)
-		{
-			echo '<div>PENDING</div>';
-		}
-		else
-		{
-			echo '<div> You are friends. </div>';
-		}
-		
-?>
+	<?
 
+			if(($saidHiA == 0 && $isA) || ($saidHiB == 0 && $isB))
+			{
+
+			echo '
+				<div id="hello_button" class = "btn btn-oval btn-default">
+				 <b>HELLO!</b>
+				</div><!-- hello-->';
+			}
+			else if (($saidHiA + $saidHiB) == 1)
+			{
+				echo '<div class="match_status">FRIENDSHIP PENDING</div>';
+			}
+			else
+			{
+				echo '<div class="match_status"> You are friends. </div>';
+			}
+			
+	?>
+		</div><!-- match_content-->
       </div>
     </div>
+	
+	<div id="match_timer_container">
+		<div id="match_timer_content">
+		<div id="match_timer_title">New Match in</div>
+		<div id="match_timer"></div>
+		</div><!-- match_timer_content -->
+	</div>
+	
   </div>
-  <div class="col-sm-6 col-md-4"></div>
-</div>
+
 	<? require_once('/var/www/html/src/html/footer.html');?>
 	<script src = "/src/js/home/home.js"></script>

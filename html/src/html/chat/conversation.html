@@ -3,12 +3,18 @@
 	
 	$friendID = $Conversation->getNotUserID($User->ID);
 	$Friend = new User($friendID);
+	
+	if(!isset($PDOconn)) $PDOconn = makePDOconn();
+	
+	$domain = CDConsts::getAPIDomain($PDOconn);
 ?>
 <script>
 	var userID = '<? echo $User->ID; ?>';
 	var maxLength = <? echo $maxLength; ?>;
 	var conversationID = '<? echo $Conversation->ID; ?>';
 	var newestTime = 0;
+	var minAlpha = 0.4;
+	var domain = '<? echo $domain; ?>';
 </script>
 <link rel="stylesheet" type="text/css" href="/css/chat/conversation.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -18,7 +24,7 @@
 	<div id="conversation_min_bottom_padding"></div>
 </div>
 
-	<div id="conversation_title"><? echo $Friend->row['fName']." ".$Friend->row['lName']; ?></div>
+	<div id="conversation_title"><a href="<? echo $domain; ?>/user/<? echo $Friend->row['objectID']; ?>"><? echo $Friend->row['fName']." ".$Friend->row['lName']; ?></a></div>
 
 	<div id="send_container">
 		<div id="send_body">

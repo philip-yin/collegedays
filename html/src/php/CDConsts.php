@@ -2,7 +2,7 @@
 	//For commonly executed code
 	class CDConsts
 	{
-		public static function getAPIDomain()
+		public static function getAPIDomain($PDOconn = NULL)
 		{
 			return 'http://gocollegedays.com';
 		}

@@ -31,13 +31,13 @@
 			else
 				$content = '/var/www/html/src/html/home/unmatched.html';
 
-			$title = 'Home';
+			$title = 'CollegeDays';
 			require_once('/var/www/html/src/html/blank.html');
 			echo "<script src='/src/js/logout.js'></script>";	
 		}
 		else
 		{
-			$title = 'Home';
+			$title = 'CollegeDays';
 			$content = '/var/www/html/src/html/preferences.html';
 			require_once('/var/www/html/src/html/blank.html');	
 		}

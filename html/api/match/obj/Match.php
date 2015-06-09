@@ -104,9 +104,15 @@ class Match extends CDObject
 		return false;
 	}
 	
-	public function containsMatch()
+	public function secondsLeft()
 	{
-	    
+		if(!$this->exists)
+			return 0;
+			
+		$secondsLeft = strtotime("tomorrow", time()) - time();
+		
+		//Return time until tomorrow
+		return $secondsLeft;
 	}
 	
 	public function areMatched($userID_a, $userID_b)

@@ -4,24 +4,40 @@
 <div id="buttons_container">
 
 <?
-  if(!$isHome)
-  echo '
-  <div href="http://gocollegedays.com/" id="footer_home" class="footer_button">Home</div>';
-?>
-
-<? if(!$isYou)
+   if(!$isHome)
    echo '
-   <div href="http://gocollegedays.com/you/" id="footer_profile" class="footer_button">'.$Viewer->row['fName'].'</div>';
-?>
+   <div href="http://gocollegedays.com/" class="footer_button"> <div id="footer_home" class="footer_circle"></div> </div>';
 
-<? if(!$isFriends)
-   echo '
-   <div href="http://gocollegedays.com/friends/" id="footer_friends" class="footer_button">Friends</div>';
+
+   if(!$isYou)
+   {
+	    echo '
+	    <div href="http://gocollegedays.com/you/" class="footer_button"><div id="footer_profile" class="footer_circle"></div></div>';
+	    echo "<style>
+		 	#footer_profile
+			{
+				background: url('".$Viewer->getImageURL()."') no-repeat center center;
+				background-size: 60px;
+			}
+			</style>";
+	}
+
+    if(!$isFriends)
+    echo '
+    <div href="http://gocollegedays.com/friends/" class="footer_button"><div id="footer_friends" class="footer_circle"></div></div>';
 ?>
 </div>
 
-<div id='logoutcontainer'>
-  <div id='logoutlink'>Logout</div>
+<div class="ninesixty_container" id="links_container">
+    <p> 
+		<span style="font-size: 14px">
+		<a href="http://gocollegedays.com/settings">Settings &#8226; </a>
+		<a href="http://gocollegedays.com/settings">Privacy  &#8226; </a>
+		<a href="http://gocollegedays.com/settings">Terms</a>
+		<br>
+		</span>
+		<span style="font-weight: 12px">CollegeDays &#169; 2015</span>
+	</p>
 </div>
 
 <script src='/src/js/logout.js'></script>

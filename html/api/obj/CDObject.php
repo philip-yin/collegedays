@@ -65,6 +65,11 @@ class CDObject
 		}
 	}
 	
+	public function bindParam($key, $value)
+	{
+		$this->row[$key] = $value;
+	}
+	
 	public function disconnect()
 	{
 		unset($this->PDOconn);

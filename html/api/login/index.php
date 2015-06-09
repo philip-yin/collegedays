@@ -12,6 +12,8 @@
 	include_once('/var/www/html/src/php/setup.php');
 	include_once('/var/www/html/api/user/obj/User.php');
 	
+	$PDOconn = newPDOconn();
+	
 	$response = array();
 	
 	$response['meta']['time'] = time();
@@ -60,6 +62,13 @@
 	session_start();
 	$_SESSION['userID'] = $User->ID;
 
+	//Save the time
+	$sql = "UPDATE user SET time_l=:login_time WHERE objectID=:userID";
+	$stmtA = $PDOconn->prepare($sql);
+	$paramsA[':login_time'] = time();
+	$paramsA[':userID'] = $User->ID;
+	$stmtA->execute($paramsA);
+	
 	//Set the status to 1 (success)
 	$response['meta']['status'] = 1;
 

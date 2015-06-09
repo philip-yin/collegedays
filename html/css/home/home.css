@@ -1,10 +1,129 @@
-#profile_description
+#match_container
+{
+	min-height: 400px;	
+}
+
+#match_container
+{
+	width: 280px; height: 390px;
+	margin: auto;
+
+	color: #3d3d3d;
+	position: relative;
+}
+
+#match_block
+{
+	padding-top: 20px;
+	padding-bottom: 20px;
+	background: #f4f4f4;
+	border-radius: 7px;
+}
+
+#match_description
 {
 	width: 100%;
 	background: none;
 	border: 0px;
+	text-align: center;
+	resize: none;
+}
+
+#match_name
+{
 	color: #3d3d3d;
-	text-alignment: justify;
+	font-weight: bold;
+}
+
+#match_school
+{
+	color: #3d3d3d;
+	font-weight: bold;
+}
+
+#match_show
+{
+	width: 100%; height: 40px;
+	position: absolute;
+	top: 0; left: 0; right: 0;
+	line-height: 40px;
+	font-weight: bold;
+	opacity: 0; display: none;
+	background: #5193ce;
+	color: #f4f4f4;
+	click-events: all;
+	z-index: 10;
+	border-radius: 7px;
+}
+
+#match_show:hover
+{
+	cursor: pointer;
+	opacity: 0.8;
+	color: white;
+}
+
+#match_banner
+{
+	width: 80px; height: 80px;
+	background: url('https://s3-us-west-2.amazonaws.com/greatdays/gui/motd_100x100.png') no-repeat left top;
+	background-size: 80px;
+	position: absolute;
+	left: -5px; top: -5px;
+}
+
+#match_hide
+{
+	width: 40px; height: 40px;
+	background: url('https://s3-us-west-2.amazonaws.com/greatdays/gui/x_100x100.png') no-repeat center center;
+	background-size: 18px;
+	position: absolute;
+	top: 0; right: 0;
+
+}
+
+#match_hide:hover
+{	
+	cursor: pointer;
+	opacity: 0.7;
+}
+
+#match_timer_container
+{
+	width: 280px;
+	height: 0px;
+	margin: auto;
+	display: none;
+	overflow: hidden;
+	max-height: 300px;
+
+}
+
+#match_timer_content
+{
+	opacity: 0;
+}
+
+#match_timer_title
+{
+	width: 100%;
+	text-align: center;
+	margin-top: 70px;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+#match_timer
+{
+	font-weight: bold;
+	font-size: 30px;
+	color: #f4f4f4;
+	text-shadow: #3d3d3d 0px 2px;
+}
+
+.match_status
+{
+	font-weight: bold;
 }
 
 .button

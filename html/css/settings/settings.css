@@ -27,3 +27,21 @@ h1 {
 	width: 220px;
 }
 
+.setting
+{
+	margin: auto;
+	height: 40px;
+	max-width: 300px;
+	line-height: 40px;
+	font-size: 16px;
+	background: #f4f4f4;
+	color: #3d3d3d;
+	text-shadow: none;
+	margin-bottom: 10px;
+}
+
+.setting:hover
+{
+	background: white;
+	cursor: pointer;
+}

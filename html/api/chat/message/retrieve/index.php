@@ -35,6 +35,9 @@
 
 	if(!isset($newerThan) || $newerThan == 0) $newerThan = NULL;
 	
+	//Set newer than to last 24 hours
+	//$newerThan = //time() - ((60*60)*24);
+	
 	//OK
 	require_once('/var/www/html/api/conversation/obj/Conversation.php');
 	$Conversation = new Conversation($conversationID, $PDOconn);
@@ -48,6 +51,7 @@
 	
 	//Set the status to 1 (success)
 	$response['meta']['status'] = $messagesResponse[0]['status'];
+	
 	$response['data']['messages'] = $messagesResponse[1]['messages'];
 	$response['data']['newerThan'] = $newerThan;
 

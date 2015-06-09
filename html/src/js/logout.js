@@ -1,5 +1,5 @@
 
-$('#logoutcontainer').click(function(){
+$('#logoutButton').click(function(){
 	event.preventDefault();
     tryLogout();
 });

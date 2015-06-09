@@ -1,7 +1,5 @@
 <link rel="stylesheet" type="text/css" href="/css/profile/profile.css">
 
-<? require_once('/var/www/html/src/html/header.html'); ?>
-
     <div id="user_block">
 
 	<?
@@ -19,7 +17,7 @@
 			<? echo $User->row['fName']." ".$User->row['lName']; ?>
 		</h3>
 
-<textarea id="profile_description" form = "edit" style="resize: none;" <? if($User->ID != $Viewer->ID) echo 'readonly'; ?>>
+<textarea id="profile_description" style="resize: none;" <? if($User->ID != $Viewer->ID) echo 'readonly'; ?>>
 <? 
 				if($User->row['description'] == '' )
 					echo $User->row['fName']." has no description";
@@ -29,16 +27,18 @@
 </textarea>
 
 		<?
-			if($User->ID == $Viewer->ID){
-		?>
-			<form id="edit">
-				<input id = "editButton" type="submit" value= "Update Description">
-			</form>
-		<? 
+			if($User->ID == $Viewer->ID)
+			{
+				echo '<style> #profile_description{ background: #2d2d2d; } </style>';
+				echo '<div id="saveDescription">SAVE</div>';
 			} 
 		?>	
 	
     </div>
 	
 <? require_once('/var/www/html/src/html/footer.html');?>
+
+<script>
+	var savedText = <? echo json_encode($User->row['description']) ?>;
+</script>
 <script src="/src/js/profile.js"></script>

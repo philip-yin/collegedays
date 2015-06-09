@@ -40,7 +40,38 @@ function uploadImage()
 	});
 }
 
-$('#editButton').click( function(event)
+var isSaved = true;
+$('#profile_description').bind('input propertychange', function() {
+
+      var text = this.value;
+	  
+	  if(text != savedText)
+		isSaved = false;
+		
+	  reflectSaved();
+});
+
+function reflectSaved()
+{
+	if(isSaved)
+	{
+		$('#saveDescription').animate({opacity: '0'}, 250);
+	}
+	else
+	{
+		$('#saveDescription').animate({opacity: '1'}, 250);
+	}
+}
+
+$('#saveDescription').hover(function(){
+	if(!isSaved)
+    $(this).css("cursor", "pointer");
+    }, 
+	function(){
+    $(this).css("cursor", "default");
+});
+
+$('#saveDescription').click( function(event)
 {
 	event.preventDefault();
 
@@ -60,7 +91,8 @@ $('#editButton').click( function(event)
 		if(response['meta']['status'] == 1)
 		{
 			//email changed
-			location = domain+'/you/';
+			isSaved = true;
+			reflectSaved();
 
 		}
 		else if(response['meta']['status'] == 0)

@@ -95,6 +95,7 @@ class Conversation extends CDObject
 	public function getMessages($newerThan = NULL, $olderThan = NULL, $newFirst = 0)
 	{
 		$response[0]['status'] = 0;
+		$response[0]['time'] = time();
 		$response[1]['reason'] = '';
 		
 		if(!$this->exists)
@@ -147,7 +148,16 @@ class Conversation extends CDObject
 				$smallestIndex = $Message->row['m_index'];
 			
 			$Message->disconnect();
+			
+			//Calculate alpha
+			$minAlpha = 0.25;
+			$maxSeconds = (60 * 60) * 24; //one day
+			$messageAlpha = max($minAlpha, 1 - (($response[0]['time'] - $Message->row['time']) / $maxSeconds));
+			
+			$Message->bindParam('alpha', $messageAlpha);
+			
 			$messages[count($messages)] = $Message;
+			
 		}
 		
 		//Are there older messages?

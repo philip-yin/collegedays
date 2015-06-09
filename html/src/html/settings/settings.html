@@ -8,18 +8,27 @@
   
   <body>
     
-    <div class="setting">
-	<h4><a a href="<? echo $domain; ?>/settings/preferences/" class = "btn btn-default custom" >Match Preferences</a></h4>
-    </div>
-    <div class="setting">
-       <h4><a href = "<? echo $domain; ?>/settings/email" class = "btn btn-default custom">Email Address</a></h4>
-    </div>
-    <div class="setting">
-       <h4><a href = "<? echo $domain; ?>/settings/name" class = "btn btn-default custom">Edit Name</a></h4>
-    </div> <!--
-    <div class="setting">
-     <h4><a href= "<? echo $domain ?>/settings/account" class = "btn btn-default custom">Disable Account</a></h4>
-    </div> -->
+	<a href="<? echo $domain; ?>/settings/preferences/">
+		<div class="button setting">
+			Match Preferences
+		</div>
+	</a>
+	
+	<a href = "<? echo $domain; ?>/settings/email">
+		<div class="button setting">
+		 Email Address
+		</div>
+	</a>
+	
+	<a href = "<? echo $domain; ?>/settings/name">
+		<div class="button setting">
+		Edit Name
+		</div>
+	</a>
+	
+	<div class="button setting" id="logoutButton">
+		  Logout
+	</div> 
 
       <? require_once('/var/www/html/src/html/footer.html');?>
     
@@ -31,3 +40,4 @@
     }
     </script>
 </html>
+<script src='/src/js/logout.js'></script>

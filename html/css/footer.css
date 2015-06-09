@@ -1,7 +1,6 @@
 #buttons_container
 {
-	width: 280px; height: 40px;
-	background: red;
+	width: 180px; height: 80px;
 	border: 0px;
 	margin: auto;
 	border-radius: 5px;
@@ -11,7 +10,6 @@
 .footer_button
 {
 	width: 50%;
-	padding-top: 8px;
 	height: 100%;
 	float: left;
 	color: #f4f4f4;
@@ -19,27 +17,67 @@
 	text-shadow: #3d3d3d 0px 1px;
 }
 
+.footer_circle
+{
+	width: 60px; height: 60px;
+	background: #f4f4f4;
+	border-radius: 30px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .footer_button:hover
 {
 	cursor: pointer; color: white;
 }
 
-#footer_home
+#links_container
 {
-	background: #77dbb7;
+	font-weight: bold;
+	opacity: 0.5;
 }
 
-	#footer_home:hover{ background: #85e0bd; } 
+#footer_settings_container
+{
+	width: 100%;
+	max-width: 300px;
+	height: 40px;
+	padding-top: 10px;
+	margin: auto;
+}
+
+#footer_settings
+{
+	width: 30px; height: 30px;
+	background: url('https://s3-us-west-2.amazonaws.com/greatdays/gui/gear_100x100.png') no-repeat center center;
+	background-size: 30px;
+	float: right;
+}
+
+#footer_home
+{
+	background: #f4f4f4 url('https://s3-us-west-2.amazonaws.com/greatdays/gui/home_100x100.png') no-repeat center center;
+	background-size: 60px;
+}
+
+	#footer_home:hover{ 
+	background: white url('https://s3-us-west-2.amazonaws.com/greatdays/gui/home_100x100.png') no-repeat center center;
+	background-size: 60px; 
+	} 
 
 #footer_profile
 {
-	background: #3a3a3a; 
+	background: #f4f4f4; 
 }
-	#footer_profile:hover{ background: #474747; }
+	#footer_profile:hover{ }
 	
 #footer_friends
 {
-	background: #e53855;
+	background: #f4f4f4 url('https://s3-us-west-2.amazonaws.com/greatdays/gui/chat_100x100.png') no-repeat center center;
+	background-size: 60px;
 }
-	#footer_friends:hover{ background: #e8496b; }
+	#footer_friends:hover{ 	
+	background: white url('https://s3-us-west-2.amazonaws.com/greatdays/gui/chat_100x100.png') no-repeat center center;
+	background-size: 60px; 
+	}
 	

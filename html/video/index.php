@@ -1,4 +1,9 @@
-<video width="100%" height="100%" controls>
-  <source src="./collegedays_promo_v1.mp4" type="video/mp4">
-Your browser does not support the video tag.
-</video>
+<iframe width="100%" height="100%" src="https://www.youtube.com/embed/l0RhBW9qLEM" frameborder="0" allowfullscreen></iframe>
+<style>
+	body, html
+	{
+		background: black;
+		border: 0px;
+		padding: 0px;
+	}
+</style>

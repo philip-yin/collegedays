@@ -122,6 +122,7 @@ function getMessages(newFirst)
 	}});
 }
 
+messagesDict = new Array();
 function loadMessages(messages)
 {
 	var i = 0;
@@ -130,25 +131,55 @@ function loadMessages(messages)
 		var message = messages[i];
 		if(message['row']['time'] > newestTime) newestTime = message['row']['time'];
 		
+		//Add message
 		$('#conversation_messages').append(getMessageHTML(message));
+		messagesDict[ message['row']['objectID'] ] = message;
+		
 	}
 	
 	if(i > 0)
 	$('html, body').scrollTop( $(document).height() );
+	
+	//Reflect the messages
+	reflectMessages();
+}
+
+function reflectMessages()
+{
+	for(var key in messagesDict)
+	{
+		message = messagesDict[key];
+		
+		//message id
+		var m_index = message['row']['m_index'];
+		
+		//Set the message alpha
+		//alert('mo: '+message['row']['alpha']);
+		$('#mbody_'+m_index).css('opacity', message['row']['alpha']);
+		
+	}
 }
 
 function getMessageHTML(message)
 {
 		var lr = 'left';
 		if(message['row']['userID'] == userID) lr = 'right';
+	
+		//Calculate alpha
+		var messageAlpha = 1;
+		var messageTime = message['row']['time'];
 		
+	
 		var messageHTML = '';
+	
+		var message_m_index = message['row']['m_index'];
 		
-			messageHTML += '<div class="message_container">';
-			messageHTML += '<div class="message_body message_'+lr+'">';
+			messageHTML += '<div class="message_container" id="m_index_'+message_m_index+'">';
+			messageHTML += '<div class="message_body message_'+lr+'" id="mbody_'+message_m_index+'">';
 			messageHTML += message['row']['body'];
 			messageHTML += '</div>';
 			messageHTML += '</div>';
 
 		return messageHTML;
 }
+
