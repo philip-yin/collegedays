@@ -8,12 +8,11 @@ $("document").ready(function(){
 function uploadImage()
 {
 	//Send request
-	//var image = $('#file_input').val();
 	var file_data = $('#file_input').prop('files')[0];   
     var form_data = new FormData(); 
 	form_data.append('file', file_data);
 	
-	$.ajax({type: "POST", url: domain+"/api/upload/image/",	
+	$.ajax({type: "POST", url: domain+"/api/image/upload/",	
 	data: form_data,
 	contentType: false,
 	processData: false,

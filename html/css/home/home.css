@@ -5,7 +5,7 @@
 
 #match_container
 {
-	width: 280px; height: 390px;
+	width: 280px;
 	margin: auto;
 
 	color: #3d3d3d;
@@ -18,11 +18,12 @@
 	padding-bottom: 20px;
 	background: #f4f4f4;
 	border-radius: 7px;
+	height: 390px;
 }
 
 #match_description
 {
-	width: 100%;
+	width: 100%; height: 80px;
 	background: none;
 	border: 0px;
 	text-align: center;
@@ -119,6 +120,16 @@
 	font-size: 30px;
 	color: #f4f4f4;
 	text-shadow: #3d3d3d 0px 2px;
+}
+
+#match_image
+{
+	width: 160px; height: 160px;
+	background: url('https://s3-us-west-2.amazonaws.com/greatdays/collegedays_bear_600x200.png') no-repeat center center;
+	background-size: 100px;
+	border-radius: 80px;
+	margin-top: 20px;
+	margin: auto;
 }
 
 .match_status

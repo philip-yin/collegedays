@@ -34,7 +34,22 @@
 	  <div id="match_hide"></div>
 
       <div id="match_content">
-		  <img id="matchimage" class="img-circle" src="<? echo $Someone->getImageURL(); ?>">
+		  <div id="match_image"></div>
+		  <?
+			if($Someone->getImageURL() != '')
+			{
+				echo '<style>
+				
+					#match_image
+					{
+						background: url("'.$Someone->getImageURL().'") no-repeat center center;
+						background-size: 160px;
+					}
+				
+					</style>
+				';
+			}
+		  ?>
 		  <div class="caption">
 			<h3 id="match_name">
 			  <a href="<? echo $domain.'/'.$match_endpoint.'/'.$Someone->ID; ?>">

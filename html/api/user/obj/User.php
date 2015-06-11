@@ -117,7 +117,10 @@ class User extends CDObject
 	
 	public function getImageURL()
 	{
-		return $this->row['imageURL'];
+		require_once('/var/www/html/api/image/obj/Image.php');
+		$Image = new Image($this->row['imageID']);
+		
+		return $Image->getURL();
 	}
 	
 	public function setMatching($matching)
@@ -530,6 +533,25 @@ class User extends CDObject
 		}
 		
 		return $Conversation;
+	}
+	
+	//Images
+	public function deleteImage()
+	{
+		require_once('/var/www/html/api/image/obj/Image.php');
+		$Image = new Image($this->row['imageID']);
+
+		$Image->delete();
+		$this->setImage('');
+	}
+	
+	public function setImage($imageID)
+	{
+		$sql = "UPDATE user SET imageID=:imageID WHERE objectID=:objectID";
+		$stmtA = $this->PDOconn->prepare($sql);
+		$paramsA[':imageID'] = $imageID;
+		$paramsA[':objectID'] = $this->ID;
+		$stmtA->execute($paramsA);
 	}
 }
 

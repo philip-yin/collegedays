@@ -3,20 +3,46 @@
     <div id="user_block">
 
 	<?
-		$imageStyle = 'background: white url('.$User->getImageURL().') no-repeat center center; ';
-		$imageStyle .= 'background-size: 160px;';
-	?>
+		$imageURL = $User->getImageURL();
+		$imageColor = "#3d3d3d";
+		$imageSize = '160';
 		
+		if($imageURL == '')
+		{
+			//No image, is user?
+			if($Viewer->ID == $User->ID)
+			{
+				//Show an upload
+				$imageURL = 'https://s3-us-west-2.amazonaws.com/greatdays/gui/upload_160x160.png';
+				$imageColor = "#f4f4f4";
+				$imageSize = '160';
+			}
+			else
+			{
+				$imageURL = 'https://s3-us-west-2.amazonaws.com/greatdays/collegedays_bear_600x200.png';
+				$imageColor = "#f4f4f4";
+				$imageSize = '100';
+			}
+		}
+		
+		$imageStyle = "background: ".$imageColor." url('".$imageURL."') no-repeat center center;";
+		$imageStyle .= 'background-size: '.$imageSize.'px;';
+	?>
+
 		<div id="profile_picture" style="<? echo $imageStyle; ?>">
-					<!-- <form method="post" action="http://gocollegedays.com/api/upload/image/" enctype="multipart/form-data">-->
+					<!-- <form method="post" action="http://gocollegedays.com/api/image/upload/" enctype="multipart/form-data"> -->
 					<? if($Viewer->ID == $User->ID) echo "<input type='file' name='file' id='file_input'/>"; ?>
-					<!-- </form> -->
+					<!-- <input type='file' name='file' id='file_input2'/>
+						<input type="submit">
+					</form> -->
 		</div><!-- profile-picture -->
 		
         <h3 id="profile_name">
 			<? echo $User->row['fName']." ".$User->row['lName']; ?>
 		</h3>
-
+		<p id="profile_school">
+			  <? echo $User->row['school']; ?>
+		</p>
 <textarea id="profile_description" style="resize: none;" <? if($User->ID != $Viewer->ID) echo 'readonly'; ?>>
 <? 
 				if($User->row['description'] == '' )

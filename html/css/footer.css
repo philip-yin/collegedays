@@ -67,9 +67,17 @@
 
 #footer_profile
 {
-	background: #f4f4f4; 
+				background: #f4f4f4 url('https://s3-us-west-2.amazonaws.com/greatdays/gui/you_100x100.png') no-repeat center center;
+				background-size: 60px;
 }
-	#footer_profile:hover{ }
+	#footer_profile:hover{ 
+				background: white url('https://s3-us-west-2.amazonaws.com/greatdays/gui/you_100x100.png') no-repeat center center;
+				background-size: 60px;}
+	
+	#footer_profile_image:hover
+	{
+		opacity: 0.8;
+	}
 	
 #footer_friends
 {

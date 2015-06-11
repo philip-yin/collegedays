@@ -8,7 +8,7 @@
 		//Create a meta object
 		$meta = array();
 		$meta['time'] = time();
-		$meta['type'] = '/account/preferences/';
+		$meta['type'] = '/image/upload/';
 		$meta['status'] = 0;
 
 	//Add the meta
@@ -71,11 +71,26 @@
 	}
 
 	 //The image passed all the tests! 
-	 $fileName = $_FILES['image']['name'];
-	 $fileExt = str_replace("_FILENAME_", "", $fileName);
+	 $fileName = $_FILES['file']['name'];
+
+		//Get file ext
+		for($i = (strlen($fileName) - 1); $i >= 0; $i--)
+		{
+			if($fileName[$i] == '.')
+				break;
+				
+			$fileExt .= $fileName[$i];
+		}
 	 
-	 //Generate new filename;
-	 $newFileName = $User->ID."_".time();
+	 $fileExt = ".".strrev($fileExt);
+
+	 //Create the image
+	 require_once('/var/www/html/api/image/obj/Image.php');
+	 $Image = new Image(NULL, $PDOconn);
+	 
+	 //Generate new filename
+	 $Image->ID = $Image->generateUniqueID();
+	 $newFileName = $Image->ID;
 	 $newFileNameWithExt = $newFileName.$fileExt;
 
 	 $accessKey = CDConsts::getConst("AWS_ACCESS_KEY", 'charValue', $PDOconn);
@@ -86,64 +101,50 @@
 	   'secret' => $secretKey
 	 ));
 	 
-     //Get the bucket
-	 $cdimageBucket;
-	 $bucketName = "greatdays";
-	 $result = $client->listBuckets();
+    //Get the bucket
+	$cdimageBucket;
+	$bucketName = "greatdays";
+	$result = $client->listBuckets();
       
-	 foreach ($result['Buckets'] as $bucket) {
-		// Each Bucket value will contain a Name and CreationDate
+	foreach ($result['Buckets'] as $bucket) {
+	// Each Bucket value will contain a Name and CreationDate
 		
 		if($bucket['Name'] == $bucketName)
 		{
 		   $cdimageBucket = $bucket;
 		   break;
 		}
-	 }	 
+	}	 
 	 
-	 if($cdimageBucket == NULL)
-	 {
-	   $response['reason'] = "No image bucket.";
-	   sendResponse(400, json_encode($response));
-	   return false; 	 
-	 }
+	if($cdimageBucket == NULL)
+	{ 
+		$response['reason'] = "No image bucket.";
+		sendResponse(400, json_encode($response));
+		return false; 	 
+	}
 
-	 //Insert image into bucket
-	 $result = $client->putObject(array(
-			'Bucket'     => $cdimageBucket['Name'],
-			'Key'        => $newFileNameWithExt,
-			'SourceFile' => $_FILES['file']['tmp_name']
-		));
+	//Insert image into bucket
+	$result = $client->putObject(array(
+		'Bucket'     => $cdimageBucket['Name'],
+		'Key'        => "/img/".$newFileNameWithExt,
+		'SourceFile' => $_FILES['file']['tmp_name']
+	));
  
-	 // We can poll the object until it is accessible
-	 $client->waitUntil('ObjectExists', array(
-			'Bucket' => $cdimageBucket['Name'],
-			'Key'    => $newFileNameWithExt
-	 ));
+	// We can poll the object until it is accessible
+	$client->waitUntil('ObjectExists', array(
+		'Bucket' => $cdimageBucket['Name'],
+		'Key'    => "/img/".$newFileNameWithExt
+	));
 
-	 //Get a url for the image
-	 $expireInSeconds = 50 * (60 * 60);
-	 $expireInMinutes = $expireInSeconds / 60;
-	 $signedURL = $client->getObjectUrl($cdimageBucket['Name'], $newFileNameWithExt, '+'.$expireInMinutes.' minutes');
+	$Image->create($newFileNameWithExt);
 	 
-	 //Insert image into table
-	 $currentTime = time();
-	 $expTime = $currentTime + $expireInSeconds;
-	 
-	 $sql = "UPDATE user SET imageURL=:imageURL, imageExp=:imageExp WHERE 
-	 objectID=:userID";
-	 
-	 $stmtI = $PDOconn->prepare($sql);
-	 $paramsI[':userID'] = $User->ID;
-	 $paramsI[':imageURL'] = $signedURL;
-	 $paramsI[':imageExp'] = $expTime;
-	 $successI = $stmtI->execute($paramsI);
+		//Update the user's image
+		$User->deleteImage();
+		$User->setImage($Image->ID);
 
-	 $response['meta']['status'] = 1;
-	 $response['data']['imageURL'] = $signedURL;
-
-		//Set the status to 1 (success)
-	    $response['meta']['status'] = (int)1;
+	//Set the status to 1 (success)
+	$response['meta']['status'] = 1;
+	$response['data']['imageURL'] = $signedURL;
 
 	//Send the response
 	sendResponse(200, json_encode($response));

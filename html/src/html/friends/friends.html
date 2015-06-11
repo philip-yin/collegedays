@@ -55,11 +55,44 @@ if(true)
 		    
 			$friend_endpoint = 'chat';
 			
+			$style = 'width: 100px; height: 100px; margin: auto; border-radius: 50px; '; 
+			
+			$style .= 'background: #f4f4f4 url("https://s3-us-west-2.amazonaws.com/greatdays/collegedays_bear_600x200.png")
+					  no-repeat center center;
+					  background-size: 60px;';
+			
+			$imageURL = $Friend->getImageURL();
+			
+			if($imageURL != '')
+			$style .= 'background: #f4f4f4 url("'.$imageURL.'") no-repeat center center;
+					  background-size: 100px; ';
+			
 			//Display their name
-			echo "<div class='col-md-4'><img src='".$Friend->getImageURL()."' height='100' width='100'><p>
-					<a href='http://gocollegedays.com/".$friend_endpoint."/".$Friend->ID."'>".$Friend->row['fName']." ".$Friend->row['lName']."</a>
-				  </p></div>";
-        }
+			echo "<div class='col-md-4'>
+			
+			
+				  <a href='http://gocollegedays.com/".$friend_endpoint."/".$Friend->ID."'>
+				  <div id='friend_image_".$i."'></div>
+				  
+				  <p>
+					".$Friend->row['fName']." ".$Friend->row['lName']."</a>
+				  </p>
+				  
+				  </a>
+				  
+				  </div>";
+        
+			echo "<style>
+			
+				 #friend_image_".$i."
+				 {
+				 ".
+				 $style
+				 ."
+				 }
+			
+				 </style>";
+		}
         echo "</div>";
 }
 
